@@ -3,8 +3,13 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -28,32 +33,58 @@ class Post extends Model
         'published_at' => 'datetime',
     ];
 
-    public function author()
+    /**
+     * Get the author of the document.
+     *
+     * @return BelongsTo
+     */
+    public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function categories()
+    /**
+     * Retrieve the categories associated with this model.
+     *
+     * @return BelongsToMany
+     */
+    public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class);
     }
 
-    public function comments()
+    /**
+     * Retrieve the comments associated with this model.
+     *
+     * @return HasMany
+     */
+    public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
     }
 
-    public function likes()
+    /**
+     * Get the users who have liked this post.
+     *
+     * @return BelongsToMany
+     */
+    public function likes(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'post_like')->withTimestamps();
     }
 
-    public function scopePublished($query)
+    /**
+     * Scope a query to only include published posts.
+     *
+     * @param Builder $query
+     * @return void
+     */
+    public function scopePublished(Builder $query): void
     {
         $query->where('published_at', '<=', Carbon::now());
     }
 
-    public function scopeWithCategory($query, string $category)
+    public function scopeWithCategory($query, string $category): void
     {
         $query->whereHas('categories', function ($query) use ($category) {
             $query->where('slug', $category);
@@ -61,38 +92,75 @@ class Post extends Model
     }
 
 
-    public function scopeFeatured($query)
+    public function scopeFeatured($query): void
     {
         $query->where('featured', true);
     }
 
-    public function scopePopular($query)
+    public function scopePopular($query): void
     {
         $query->withCount('likes')
             ->orderBy("likes_count", 'desc');
     }
 
-    public function scopeSearch($query, string $search = '')
+    public function scopeSearch($query, string $search = ''): void
     {
         $query->where('title', 'like', "%{$search}%");
     }
 
-    public function getExcerpt()
+    public function getExcerpt($words = 30): string
     {
-        return Str::limit(strip_tags($this->body), 150);
+        return Str::words(strip_tags($this->body), $words);
+
+        // return Str::limit(strip_tags($this->body), 150);
     }
 
-    public function getReadingTime()
-    {
-        $mins = round(str_word_count($this->body) / 250);
+    // public function getReadingTime()
+    // {
+    //     $mins = round(str_word_count($this->body) / 250);
 
-        return ($mins < 1) ? 1 : $mins;
+    //     return ($mins < 1) ? 1 : $mins;
+    // }
+
+    public function getReadingTime(): Attribute
+    {
+        return new Attribute(
+            get: function ($value, $attributes) {
+                $words = Str::wordCount(strip_tags($attributes['body']));
+                $minutes = ceil($words / 200);
+
+                return $minutes . ' ' . str('min')->plural($minutes) . ', '
+                    . $words . ' ' . str('word')->plural($words);
+            }
+        );
     }
 
     public function getThumbnailUrl()
     {
         $isUrl = str_contains($this->image, 'http');
 
-        return ($isUrl) ? $this->image : Storage::disk('public')->url($this->image);
+        if ($isUrl) {
+            return $this->image;
+        }
+        return Storage::disk('public')->url($this->image);
+    }
+
+    public function getNextPost(): self|null
+    {
+        return $this->getPublishedPost('desc');
+    }
+
+    public function getPrevPost(): self|null
+    {
+        return $this->getPublishedPost('asc');
+    }
+
+    private function getPublishedPost(string $order): self|null
+    {
+        return self::query()
+            ->published()
+            ->orderBy('published_at', $order)
+            ->limit(1)
+            ->first();
     }
 }

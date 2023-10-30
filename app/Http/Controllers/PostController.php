@@ -4,35 +4,50 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\PostView;
+use App\Service\PostViewService;
 use Carbon\Carbon;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    public function index()
-    {
+    private PostViewService $postViewService;
 
+    public function __construct(PostViewService $postViewService)
+    {
+        $this->postViewService = $postViewService;
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Factory|\Illuminate\Foundation\Application|\Illuminate\View\View|Application The view for displaying the list of categories.
+     */
+    public function index(): View|\Illuminate\Foundation\Application|Factory|Application
+    {
         $categories = Cache::remember('categories', now()->addDays(3), function () {
-            return Category::whereHas('posts', function ($query) {
+            return Category::query()->whereHas('posts', function ($query) {
                 $query->published();
             })->take(10)->get();
         });
 
-        return view(
-            'posts.index',
-            [
-                'categories' => $categories
-            ]
-        );
+        return view('posts.index', compact('categories'));
     }
 
-    public function show(Post $post)
+    /**
+     * Show the post.
+     *
+     * @param Post    $post    The post to be shown.
+     * @param Request $request The current request.
+     * @return Factory|\Illuminate\Foundation\Application|\Illuminate\View\View|Application The view for displaying the post.
+     */
+    public function show(Post $post, Request $request): Factory|\Illuminate\Foundation\Application|View|Application
     {
-        return view(
-            'posts.show',
-            [
-                'post' => $post
-            ]
-        );
+        $this->postViewService->handleView($request, $post);
+        return view('posts.show', compact('post'));
     }
 }
