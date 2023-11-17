@@ -65,4 +65,16 @@ class UserFactory extends Factory
             'ownedTeams'
         );
     }
+
+    public function admin(): static
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'name' => 'Admin',
+                'email' => 'admin@admin.com',
+                'password' => bcrypt('password'), // password
+                'role' => User::ROLE_ADMIN,
+            ];
+        });
+    }
 }

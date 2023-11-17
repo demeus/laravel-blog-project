@@ -8,7 +8,7 @@
         </div>
         <div class="col-span-8">
             <div class="flex items-center py-1 text-sm article-meta">
-                <x-posts.author :author="$post->author" size="xs" />
+                <x-posts.author :author="$post->author" size="xs"/>
                 <span class="text-xs text-gray-500">. {{ $post->published_at->diffForHumans() }}</span>
             </div>
             <h2 class="text-xl font-bold text-gray-900">
@@ -23,14 +23,19 @@
             <div class="flex items-center justify-between mt-6 article-actions-bar">
                 <div class="flex gap-x-2">
                     @foreach ($post->categories as $category)
-                        <x-posts.category-badge :category="$category" />
+                        <x-posts.category-badge :category="$category"/>
                     @endforeach
                     <div class="flex items-center space-x-4">
-                        <span class="text-sm text-gray-500">{{ $post->getReadingTime() }} min read</span>
+
+                        <span class="text-sm text-gray-500">
+                            Published on
+                            {{$post->getFormattedDate()}} | {{ $post->human_read_time }}
+                            {{ $post->getReadingTime() }} min read
+                        </span>
                     </div>
                 </div>
                 <div>
-                    <livewire:like-button :key="'like-' . $post->id" :$post />
+                    <livewire:like-button :key="'like-' . $post->id" :$post/>
                 </div>
             </div>
         </div>

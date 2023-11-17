@@ -13,11 +13,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 class Post extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use Sluggable;
+
 
     protected $fillable = [
         'user_id',
@@ -32,6 +35,16 @@ class Post extends Model
     protected $casts = [
         'published_at' => 'datetime',
     ];
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'title'
+            ]
+        ];
+    }
+
 
     /**
      * Get the author of the document.
@@ -115,18 +128,23 @@ class Post extends Model
         // return Str::limit(strip_tags($this->body), 150);
     }
 
-    // public function getReadingTime()
-    // {
-    //     $mins = round(str_word_count($this->body) / 250);
+    public function getFormattedDate()
+    {
+        return $this->published_at->format('F jS Y');
+    }
 
-    //     return ($mins < 1) ? 1 : $mins;
-    // }
+     public function getReadingTime()
+     {
+         $mins = round(str_word_count($this->body) / 250);
 
-    public function getReadingTime(): Attribute
+         return ($mins < 1) ? 1 : $mins;
+     }
+
+    public function humanReadTime(): Attribute
     {
         return new Attribute(
-            get: function ($value, $attributes) {
-                $words = Str::wordCount(strip_tags($attributes['body']));
+            get: function () {
+                $words = Str::wordCount(strip_tags($this->body));
                 $minutes = ceil($words / 200);
 
                 return $minutes . ' ' . str('min')->plural($minutes) . ', '
