@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\VisibilityStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,9 +15,12 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('slug')->unique();
+            $table->string('slug')->unique()->index();
+            $table->string('icon')->nullable();
             $table->string('text_color')->nullable();
+            $table->string('status')->default(VisibilityStatusEnum::ACTIVE->value);
             $table->string('bg_color')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

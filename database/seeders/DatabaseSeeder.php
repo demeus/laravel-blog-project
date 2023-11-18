@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Enums\SpendTypeEnum;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Post;
@@ -36,16 +37,43 @@ class DatabaseSeeder extends Seeder
 
     private function createCategories(): void
     {
-        $categoryNames = ['Technology', 'Programming', 'Hardware', 'Software', 'Reviews', 'Tutorials'];
-        $textColors = ['text-red-500', 'text-blue-500', 'text-green-500', 'text-yellow-500', 'text-indigo-500'];
-        $bgColors = ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-indigo-500'];
+        $categories = [
+            [
+                'title' => 'Technology',
+                'text_color' => 'text-red-500',
+                'bg_color' => 'bg-red-300',
+                'icon' => 'technology',
+            ],
+            [
+                'title' => 'Programming',
+                'text_color' => 'text-blue-500',
+                'bg_color' => 'bg-blue-300',
+                'icon' => 'programming',
+            ],
+            [
+                'title' => 'Hardware',
+                'text_color' => 'text-green-500',
+                'bg_color' => 'bg-green-300',
+                'icon' => 'hardware',
+            ],
+            [
+                'title' => 'Software',
+                'text_color' => 'text-yellow-500',
+                'bg_color' => 'bg-yellow-300',
+                'icon' => 'software',
+            ],
 
-        foreach ($categoryNames as $index => $categoryName) {
-            Category::query()->create([
-                'title' => $categoryName,
-                'text_color' => $textColors[$index % count($textColors)],
-                'bg_color' => $bgColors[$index % count($bgColors)],
-            ]);
+            [
+                'title' => 'Tutorials',
+                'text_color' => 'text-indigo-500',
+                'bg_color' => 'bg-indigo-300',
+                'icon' => 'tutorials',
+            ],
+
+        ];
+
+        foreach ($categories as $category) {
+            Category::query()->create($category);
         }
     }
 

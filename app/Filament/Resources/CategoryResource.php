@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\VisibilityStatusEnum;
 use App\Filament\Resources\CategoryResource\Pages;
 use App\Filament\Resources\CategoryResource\RelationManagers;
 use App\Models\Category;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -18,9 +20,10 @@ use Illuminate\Support\Str;
 
 class CategoryResource extends Resource
 {
-    protected static ?string $model = Category::class;
+    protected static string|null $model = Category::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string|null $navigationIcon = 'heroicon-o-rectangle-stack';
+
 
     public static function form(Form $form): Form
     {
@@ -39,6 +42,14 @@ class CategoryResource extends Resource
                 TextInput::make('slug')->required()->minLength(1)->unique(ignoreRecord: true)->maxLength(150),
                 TextInput::make('text_color')->nullable(),
                 TextInput::make('bg_color')->nullable(),
+                Toggle::make('status')
+                    ->label(__('categories.fields.is_visible'))
+                    ->default(VisibilityStatusEnum::ACTIVE->value)
+                    ->helperText(__('categories.fields.is_visible_help_text'))
+                    ->afterStateHydrated(function (Toggle $component, string $state) {
+                        $component->state($state == VisibilityStatusEnum::ACTIVE->value);
+                    })
+                    ->dehydrateStateUsing(fn (string $state): string => $state ? VisibilityStatusEnum::ACTIVE->value : VisibilityStatusEnum::INACTIVE->value)
             ]);
     }
 
@@ -55,13 +66,19 @@ class CategoryResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->slideOver(),
             ])
+
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->striped()
+            ->emptyStateActions([
+                Tables\Actions\CreateAction::make()->slideOver(),
+            ])
+            ->deferLoading();
     }
 
     public static function getRelations(): array
@@ -78,5 +95,13 @@ class CategoryResource extends Resource
             'create' => Pages\CreateCategory::route('/create'),
             'edit' => Pages\EditCategory::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }
