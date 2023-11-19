@@ -19,9 +19,12 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CategoryResource extends Resource
 {
-    protected static ?string $model = Category::class;
+    protected static string|null $model = Category::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string|null $navigationGroup = 'Blog';
+
+
+    protected static string|null $navigationIcon = 'heroicon-o-tag';
 
     public static function form(Form $form) : Form
     {
@@ -57,6 +60,7 @@ class CategoryResource extends Resource
             ->columns([
                 TextColumn::make('title')->sortable()->searchable(),
                 TextColumn::make('slug')->sortable()->searchable(),
+                TextColumn::make('posts_count')->counts('posts')->sortable(),
                 TextColumn::make('text_color')->sortable()->searchable(),
                 TextColumn::make('bg_color')->sortable()->searchable(),
             ])
