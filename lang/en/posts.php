@@ -29,6 +29,6 @@ return [
     'placeholder' => [
         'title' => 'Your title',
         'content' => 'Your content',
-        'thumbnail' => 'Choose a thumbnail'
-    ]
+        'thumbnail' => 'Choose a thumbnail',
+    ],
 ];

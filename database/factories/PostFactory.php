@@ -15,7 +15,7 @@ class PostFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
+    public function definition() : array
     {
         return [
             'user_id' => User::factory(),
@@ -23,7 +23,7 @@ class PostFactory extends Factory
             'image' => $this->faker->imageUrl(),
             'body' => $this->faker->paragraph(10),
             'published_at' => $this->faker->dateTimeBetween('-1 Week', '+1 week'),
-            'featured' => $this->faker->boolean(10)
+            'featured' => $this->faker->boolean(10),
         ];
     }
 }

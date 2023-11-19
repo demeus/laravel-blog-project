@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
-use Cviebrock\EloquentSluggable\Sluggable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Category extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use Sluggable;
+    use SoftDeletes;
 
     protected $fillable = [
         'title',
@@ -23,16 +23,16 @@ class Category extends Model
         'status',
     ];
 
-    public function sluggable(): array
+    public function sluggable() : array
     {
         return [
             'slug' => [
-                'source' => 'title'
-            ]
+                'source' => 'title',
+            ],
         ];
     }
 
-    public function posts(): BelongsToMany
+    public function posts() : BelongsToMany
     {
         return $this->belongsToMany(Post::class);
     }

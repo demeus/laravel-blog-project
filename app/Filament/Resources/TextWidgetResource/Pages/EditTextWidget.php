@@ -2,15 +2,15 @@
 
 namespace App\Filament\Resources\TextWidgetResource\Pages;
 
-use App\Filament\Resources\TextWidgetResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\EditRecord;
+use App\Filament\Resources\TextWidgetResource;
 
 class EditTextWidget extends EditRecord
 {
     protected static string $resource = TextWidgetResource::class;
 
-    protected function getActions(): array
+    protected function getActions() : array
     {
         return [
             Actions\ViewAction::make(),
@@ -18,9 +18,8 @@ class EditTextWidget extends EditRecord
         ];
     }
 
-    protected function getRedirectUrl(): string
+    protected function getRedirectUrl() : string
     {
         return $this->getResource()::getUrl('index');
     }
-
 }

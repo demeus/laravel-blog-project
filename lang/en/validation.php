@@ -217,6 +217,6 @@ return [
         'thumbnail_id' => 'Thumbnail',
     ],
 
-    'errors' => ':count error :|:count errors : '
+    'errors' => ':count error :|:count errors : ',
 
 ];

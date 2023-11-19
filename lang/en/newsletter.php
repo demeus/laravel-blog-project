@@ -11,6 +11,6 @@ return [
         'welcome' => 'Welcome to the newsletter of the month!',
         'description' => 'Here is the list of: count last articles published during the month',
         'thanks' => 'Thank you for subscribing to our newsletter',
-        'unsubscribe' => 'Unsubscribe'
-    ]
+        'unsubscribe' => 'Unsubscribe',
+    ],
 ];

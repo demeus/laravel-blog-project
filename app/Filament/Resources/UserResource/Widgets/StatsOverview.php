@@ -2,12 +2,12 @@
 
 namespace App\Filament\Resources\UserResource\Widgets;
 
-use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 
 class StatsOverview extends BaseWidget
 {
-    protected function getStats(): array
+    protected function getStats() : array
     {
         return [
             Stat::make('Unique views', '192.1k'),

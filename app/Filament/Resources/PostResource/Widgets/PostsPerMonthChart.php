@@ -3,17 +3,17 @@
 namespace App\Filament\Resources\PostResource\Widgets;
 
 use App\Models\Post;
-use Filament\Widgets\ChartWidget;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
+use Filament\Widgets\ChartWidget;
 
 class PostsPerMonthChart extends ChartWidget
 {
     protected static ?string $heading = 'Chart';
 
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
-    protected function getData(): array
+    protected function getData() : array
     {
 
         $data = Trend::model(Post::class)
@@ -36,7 +36,7 @@ class PostsPerMonthChart extends ChartWidget
         ];
     }
 
-    protected function getType(): string
+    protected function getType() : string
     {
         return 'line';
     }

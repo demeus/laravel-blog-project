@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Setting extends Model
 {
@@ -12,7 +12,6 @@ class Setting extends Model
     protected $fillable = [
         'key',
         'value',
-         'category',
+        'category',
     ];
 }
-

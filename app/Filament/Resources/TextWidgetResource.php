@@ -2,24 +2,21 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\TextWidgetResource\Pages;
-use App\Filament\Resources\TextWidgetResource\RelationManagers;
-use App\Models\TextWidget;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Forms\Form;
+use App\Models\TextWidget;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Resources\Resource;
+use App\Filament\Resources\TextWidgetResource\Pages;
 
 class TextWidgetResource extends Resource
 {
-    protected static string|null $model = TextWidget::class;
+    protected static ?string $model = TextWidget::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function form(Form $form): Form
+    public static function form(Form $form) : Form
     {
         return $form
             ->schema([
@@ -35,7 +32,7 @@ class TextWidgetResource extends Resource
             ])->columns(1);
     }
 
-    public static function table(Table $table): Table
+    public static function table(Table $table) : Table
     {
         return $table
             ->columns([
@@ -57,14 +54,15 @@ class TextWidgetResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-    public static function getRelations(): array
+
+    public static function getRelations() : array
     {
         return [
             //
         ];
     }
 
-    public static function getPages(): array
+    public static function getPages() : array
     {
         return [
             'index' => Pages\ListTextWidgets::route('/'),

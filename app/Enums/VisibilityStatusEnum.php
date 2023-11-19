@@ -2,9 +2,8 @@
 
 namespace App\Enums;
 
-enum VisibilityStatusEnum: string
+enum VisibilityStatusEnum : string
 {
     case ACTIVE = 'active';
     case INACTIVE = 'inactive';
 }
-

@@ -6,11 +6,11 @@ use Filament\Widgets\ChartWidget;
 
 class BlogPostsChart extends ChartWidget
 {
-    protected static string|null $heading = 'Chart';
+    protected static ?string $heading = 'Chart';
 
     protected static string $color = 'info';
 
-    protected function getData(): array
+    protected function getData() : array
     {
         return [
             'datasets' => [
@@ -23,7 +23,7 @@ class BlogPostsChart extends ChartWidget
         ];
     }
 
-    protected function getType(): string
+    protected function getType() : string
     {
         return 'bar';
     }

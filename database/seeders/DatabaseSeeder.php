@@ -3,21 +3,19 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Enums\SpendTypeEnum;
-use App\Models\Category;
-use App\Models\Comment;
 use App\Models\Post;
-use App\Models\Setting;
 use App\Models\User;
+use App\Models\Comment;
+use App\Models\Setting;
+use App\Models\Category;
 use Illuminate\Database\Seeder;
+
 class DatabaseSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run(): void
+    public function run() : void
     {
         $this->createAdminUser();
         $this->createCategories();
@@ -25,7 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->createPosts();
     }
 
-    private function createAdminUser(): void
+    private function createAdminUser() : void
     {
         User::factory()->create([
             'name' => 'Admin',
@@ -35,7 +33,7 @@ class DatabaseSeeder extends Seeder
         ]);
     }
 
-    private function createCategories(): void
+    private function createCategories() : void
     {
         $categories = [
             [
@@ -77,7 +75,7 @@ class DatabaseSeeder extends Seeder
         }
     }
 
-    private function createSettings(): void
+    private function createSettings() : void
     {
         $settings = [
             'General' => [
@@ -88,7 +86,7 @@ class DatabaseSeeder extends Seeder
                 'Site Share Image' => '/path/to/image.jpg',
                 'Time Zone' => 'UTC',
                 'Datetime Format' => 'Y-m-d H:i:s',
-                'Display Cookie Notification Bar' => 'yes'
+                'Display Cookie Notification Bar' => 'yes',
             ],
             'Code Integration' => [
                 'Add code between <head> & </head> of the frontend' => '',
@@ -98,7 +96,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($settings as $category => $keys) {
-            foreach($keys as $key => $value) {
+            foreach ($keys as $key => $value) {
                 Setting::query()->create([
                     'category' => $category,
                     'key' => $key,
@@ -108,12 +106,10 @@ class DatabaseSeeder extends Seeder
         }
     }
 
-    private function createPosts(): void
+    private function createPosts() : void
     {
         Post::factory(100)
             ->has(Comment::factory(random_int(1, 3)))
             ->create();
     }
-
 }
-

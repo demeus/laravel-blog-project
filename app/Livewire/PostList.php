@@ -2,13 +2,13 @@
 
 namespace App\Livewire;
 
-use App\Models\Category;
 use App\Models\Post;
-use Livewire\Attributes\Computed;
+use Livewire\Component;
+use App\Models\Category;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
-use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Computed;
 
 class PostList extends Component
 {
@@ -28,7 +28,7 @@ class PostList extends Component
 
     public function setSort($sort)
     {
-        $this->sort = ($sort === 'desc') ? 'desc' : 'asc';
+        $this->sort = ('desc' === $sort) ? 'desc' : 'asc';
     }
 
     #[On('search')]
@@ -64,7 +64,7 @@ class PostList extends Component
     #[Computed()]
     public function activeCategory()
     {
-        if ($this->category === null || $this->category === '') {
+        if (null === $this->category || '' === $this->category) {
             return null;
         }
 
