@@ -11,9 +11,9 @@ use App\Filament\Resources\PageResource\Pages;
 
 class PageResource extends Resource
 {
-    protected static ?string $model = Page::class;
+    protected static string|null $model = Page::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form) : Form
     {

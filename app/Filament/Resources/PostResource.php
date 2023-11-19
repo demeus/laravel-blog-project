@@ -26,9 +26,11 @@ use App\Filament\Resources\PostResource\RelationManagers\CommentsRelationManager
 
 class PostResource extends Resource
 {
-    protected static ?string $model = Post::class;
+    protected static string|null $navigationGroup = 'Blog';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string|null $model = Post::class;
+
+    protected static string|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form) : Form
     {

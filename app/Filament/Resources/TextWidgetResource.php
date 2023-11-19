@@ -12,9 +12,11 @@ use App\Filament\Resources\TextWidgetResource\Pages;
 
 class TextWidgetResource extends Resource
 {
-    protected static ?string $model = TextWidget::class;
+    protected static string|null $navigationGroup = 'Advertisement';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string|null $model = TextWidget::class;
+
+    protected static string|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form) : Form
     {

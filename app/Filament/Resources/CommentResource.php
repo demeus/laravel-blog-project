@@ -14,9 +14,11 @@ use App\Filament\Resources\CommentResource\Pages;
 
 class CommentResource extends Resource
 {
-    protected static ?string $model = Comment::class;
+    protected static string|null $navigationGroup = 'Blog';
 
-    protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-bottom-center';
+    protected static string|null $model = Comment::class;
+
+    protected static string|null $navigationIcon = 'heroicon-o-chat-bubble-bottom-center';
 
     public static function form(Form $form) : Form
     {

@@ -12,9 +12,11 @@ use App\Filament\Resources\UserResource\Pages;
 
 class UserResource extends Resource
 {
-    protected static ?string $model = User::class;
+    protected static string|null $navigationGroup = 'Others';
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static string|null $model = User::class;
+
+    protected static string|null $navigationIcon = 'heroicon-o-users';
 
     public static function form(Form $form) : Form
     {
