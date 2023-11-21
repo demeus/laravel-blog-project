@@ -13,6 +13,8 @@ use Spatie\Activitylog\Models\Activity;
 
 class ActivityResource extends Resource
 {
+    protected static int|null $navigationSort = 3;
+
     protected static string|null $model = Activity::class;
 
     protected static string|null $navigationGroup = 'Others';

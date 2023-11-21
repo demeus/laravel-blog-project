@@ -4,6 +4,7 @@ namespace App\Models\Concerns;
 
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 
 trait HasLocalScopes
 {
@@ -29,5 +30,29 @@ trait HasLocalScopes
     public function scopeUnpublished(Builder $query) : void
     {
         $query->whereNull('published_at')->orWhere('published_at', '>', now());
+    }
+
+
+    public function scopeFeatured($query): void
+    {
+        $query->where('featured', true);
+    }
+
+    public function scopePopular($query): void
+    {
+        $query->withCount('likes')
+            ->orderBy('likes_count', 'desc');
+    }
+
+    public function scopeSearch($query, string $search = ''): void
+    {
+        $query->where('title', 'like', "%{$search}%");
+    }
+
+    public function getExcerpt($words = 30): string
+    {
+        return Str::words(strip_tags($this->body), $words);
+
+        // return Str::limit(strip_tags($this->body), 150);
     }
 }

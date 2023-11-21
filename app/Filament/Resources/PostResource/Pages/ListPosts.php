@@ -4,8 +4,10 @@ namespace App\Filament\Resources\PostResource\Pages;
 
 use Filament\Actions;
 use App\Filament\Resources\PostResource;
+use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
 use App\Filament\Resources\PostResource\Widgets\PostsPerMonthChart;
+use Illuminate\Database\Eloquent\Builder;
 
 class ListPosts extends ListRecords
 {
@@ -18,10 +20,20 @@ class ListPosts extends ListRecords
         ];
     }
 
-    protected function getFooterWidgets() : array
+    public function getTabs() : array
     {
         return [
-            PostsPerMonthChart::class,
+            'Published' => Tab::make()
+                ->query(fn (Builder $query) => $query->published()),
+            'Draft' => \Filament\Resources\Components\Tab::make()
+                ->query(fn (Builder $query) => $query->unpublished()),
         ];
     }
+
+//    protected function getFooterWidgets() : array
+//    {
+//        return [
+//            PostsPerMonthChart::class,
+//        ];
+//    }
 }

@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AdvertisementResource extends Resource
 {
+    protected static int|null $navigationSort = 2;
+
     protected static string|null $navigationGroup = 'Advertisement';
 
 

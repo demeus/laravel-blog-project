@@ -12,6 +12,8 @@ use App\Filament\Resources\UserResource\Pages;
 
 class UserResource extends Resource
 {
+    protected static int|null $navigationSort = 3;
+
     protected static string|null $navigationGroup = 'Others';
 
     protected static string|null $model = User::class;
