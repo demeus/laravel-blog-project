@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use App\Models\Post;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
@@ -35,10 +36,21 @@ class PostResource extends Resource
     public static function form(Form $form) : Form
     {
         return $form
-            ->schema([
-                Section::make('Main Content')->schema(
-                    [
-                        TextInput::make('title')
+            ->schema(static::getFormComponents())
+            ->columns([
+                'md' => 1,
+                'lg' => 3,
+            ]);
+
+
+    }
+
+    public static function getFormComponents() : array
+    {
+        return [
+            Forms\Components\Section::make('Content')
+                ->schema([
+                    TextInput::make('title')
                             ->live()
                             ->required()->minLength(1)->maxLength(150)
                             ->afterStateUpdated(function (string $operation, $state, Forms\Set $set) {
@@ -48,30 +60,83 @@ class PostResource extends Resource
 
                                 $set('slug', Str::slug($state));
                             }),
+
+
+
                         TextInput::make('slug')->required()->minLength(1)->unique(ignoreRecord: true)->maxLength(150),
                         RichEditor::make('body')
                             ->required()
                             ->fileAttachmentsDirectory('posts/images')->columnSpanFull(),
-                    ]
-                )->columns(2),
-                Section::make('Meta')->schema(
-                    [
-                        FileUpload::make('image')->image()->directory('posts/thumbnails'),
-                        DateTimePicker::make('published_at')->nullable(),
-                        Checkbox::make('featured'),
-                        Select::make('user_id')
-                            ->relationship('author', 'name')
-                            ->searchable()
-                            ->required(),
-                        Select::make('categories')
-                            ->multiple()
-                            ->relationship('categories', 'title')
-                            ->searchable(),
-                    ]
-                ),
-            ]);
-    }
 
+                    Forms\Components\MarkdownEditor::make('teaser')
+                        ->maxLength(65535)
+                        ->columnSpanFull()
+                        ->helperText('An overview of the article used in the feed with the intent to entice readers to click through.'),
+
+//                    SpatieMediaLibraryFileUpload::make('images')
+//                        ->collection('images')
+//                        ->conversion('medium')
+//                        ->disk('media-library')
+//                        ->downloadable()
+//                        ->imageEditor()
+//                        ->imageResizeMode('cover')
+//                        ->multiple()
+//                        ->visibility('public'),
+
+
+                ])
+                ->collapsible()
+                ->columnSpan([
+                    'md' => 1,
+                    'lg' => 2,
+                ]),
+            Forms\Components\Section::make('Metadata')
+                ->schema([
+                    FileUpload::make('image')->image()->directory('posts/thumbnails'),
+                    DateTimePicker::make('published_at')->nullable(),
+                    Checkbox::make('featured'),
+                    Select::make('user_id')
+                        ->relationship('author', 'name')
+                        ->searchable()
+                        ->required(),
+                    Select::make('categories')
+                        ->multiple()
+                        ->relationship('categories', 'title')
+                        ->searchable(),
+                ])
+                ->collapsible()
+                ->columnSpan([
+                    'lg' => 1,
+                ])
+            ];
+//        return $form
+//            ->schema([
+//                Section::make('Main Content')->schema(
+//                    [
+//
+//                        TextInput::make('slug')->required()->minLength(1)->unique(ignoreRecord: true)->maxLength(150),
+//                        RichEditor::make('body')
+//                            ->required()
+//                            ->fileAttachmentsDirectory('posts/images')->columnSpanFull(),
+//                    ]
+//                )->columns(2),
+//                Section::make('Meta')->schema(
+//                    [
+//                        FileUpload::make('image')->image()->directory('posts/thumbnails'),
+//                        DateTimePicker::make('published_at')->nullable(),
+//                        Checkbox::make('featured'),
+//                        Select::make('user_id')
+//                            ->relationship('author', 'name')
+//                            ->searchable()
+//                            ->required(),
+//                        Select::make('categories')
+//                            ->multiple()
+//                            ->relationship('categories', 'title')
+//                            ->searchable(),
+//                    ]
+//                ),
+//            ]);
+    }
     public static function table(Table $table) : Table
     {
         return $table
