@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('key');
             $table->string('value');
-            $table->string('category'); // New field
+            $table->json('attributes')->nullable();
+            $table->string('type')->default('text');
+            $table->string('category');
             $table->timestamps();
         });
     }

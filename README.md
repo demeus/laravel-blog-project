@@ -8,6 +8,8 @@
 </p>
 
 php .\artisan  make:filament-resource  TextWidgetResource --view --generate
+php artisan make:filament-resource Settings --simple
+
 
 ## About Laravel
 

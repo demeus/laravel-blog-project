@@ -6,7 +6,7 @@ namespace Database\Seeders;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Comment;
-use App\Models\Setting;
+use App\Models\Settings;
 use App\Models\Category;
 use Illuminate\Database\Seeder;
 
@@ -79,7 +79,7 @@ class DatabaseSeeder extends Seeder
     {
         $settings = [
             'General' => [
-                'Site Name' => 'My Site',
+                'Site Name' => config("app.name"),
                 'SEO Site Meta Title' => 'My SEO Title',
                 'Site Description' => 'This is a description of the site.',
                 'SEO Site Keywords' => 'site, SEO, keywords',
@@ -97,10 +97,11 @@ class DatabaseSeeder extends Seeder
 
         foreach ($settings as $category => $keys) {
             foreach ($keys as $key => $value) {
-                Setting::query()->create([
+                Settings::query()->create([
                     'category' => $category,
                     'key' => $key,
                     'value' => $value,
+                    'type' => 'text',
                 ]);
             }
         }
