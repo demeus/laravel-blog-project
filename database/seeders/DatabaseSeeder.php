@@ -108,8 +108,14 @@ class DatabaseSeeder extends Seeder
 
     private function createPosts() : void
     {
-        Post::factory(100)
-            ->has(Comment::factory(random_int(1, 3)))
-            ->create();
+        $categoryIds = Category::query()->pluck('id')->toArray();
+
+        for($i = 0; $i < 100; $i++) {
+            $post = Post::factory()->make();
+            $post->category_id = $categoryIds[array_rand($categoryIds)];
+            $post->save();
+
+            $post->comments()->saveMany(Comment::factory(random_int(1, 3))->make());
+        }
     }
 }

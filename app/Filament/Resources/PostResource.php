@@ -10,7 +10,10 @@ use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -91,7 +94,6 @@ class PostResource extends Resource
                 ]),
             Forms\Components\Section::make('Metadata')
                 ->schema([
-
                     Select::make('user_id')
                         ->relationship('author', 'name')
                         ->searchable()
@@ -110,12 +112,12 @@ class PostResource extends Resource
                         ->visibility('public'),
 
 //                    FileUpload::make('image')->image()->directory('posts/thumbnails'),
-                    Forms\Components\Textarea::make('description')
+                    Textarea::make('description')
                         ->maxLength(65535)
                         ->rows(5)
                         ->helperText('A short description used on the blog, social previews, and Google.'),
 
-                    Forms\Components\Toggle::make('commercial')
+                    Toggle::make('commercial')
                         ->label('Is a commercial article')
                         ->helperText('If checked, the UI will focus on conversion.'),
 
@@ -124,10 +126,12 @@ class PostResource extends Resource
                         ->timezone('UTC')
                         ->helperText('When not set, the article is considered as a draft.'),
 
+                    TagsInput::make('tags'),
 
-                    Select::make('categories')
-                        ->multiple()
-                        ->relationship('categories', 'title')
+
+                    Select::make('category_id')
+                        ->relationship('category', 'title')
+                        ->preload()
                         ->searchable(),
 
                     Forms\Components\Group::make()
@@ -182,9 +186,8 @@ class PostResource extends Resource
             ->columns(static::getTableColumns())
 
             ->filters([
-                Tables\Filters\SelectFilter::make('categories')
-                    ->relationship('categories', 'title')
-                    ->multiple(),
+                Tables\Filters\SelectFilter::make('category')
+                    ->relationship('category', 'title'),
                 Tables\Filters\Filter::make('Commercial')
                     ->query(fn (Builder $query) : Builder => $query->where('commercial', true))
                     ->toggle(),
@@ -221,6 +224,10 @@ class PostResource extends Resource
                 ->sortable()
                 ->searchable()
                 ->description(fn (Post $post) => $post->slug),
+
+            Tables\Columns\TextColumn::make('category.title')
+                ->sortable()
+                ->searchable(),
 
             Tables\Columns\TextColumn::make('author.name')
                 ->sortable()

@@ -14,7 +14,7 @@ class HomeController extends Controller
     public function __invoke(Request $request)
     {
 
-        $featuredPosts = Cache::remember('featuredPosts', now()->addDay(), fn () => Post::published()->featured()->with('categories')->latest('published_at')->take(3)->get());
+        $featuredPosts = Cache::remember('featuredPosts', now()->addDay(), fn () => Post::published()->with('categories')->latest('published_at')->take(3)->get());
 
         $latestPosts = Cache::remember('latestPosts', now()->addDay(), fn () => Post::published()->with('categories')->latest('published_at')->take(9)->get());
 
