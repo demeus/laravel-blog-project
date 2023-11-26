@@ -17,10 +17,6 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Columns\CheckboxColumn;
-use Filament\Tables\Columns\ImageColumn;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -44,8 +40,6 @@ class PostResource extends Resource
                 'md' => 1,
                 'lg' => 3,
             ]);
-
-
     }
 
     public static function getFormComponents(): array
@@ -144,7 +138,8 @@ class PostResource extends Resource
                                 ->label('Last modified at')
                                 ->content(fn(Post $post): string|null => $post->updated_at?->isoFormat('LLL')),
                         ])
-                        ->hidden(fn(Post|null $post) => $post === null),
+                        ->hidden(fn(Post $post) => !$post->exists),  //
+
                 ])
                 ->collapsible()
                 ->columnSpan([
@@ -184,12 +179,11 @@ class PostResource extends Resource
     {
         return $table
             ->columns(static::getTableColumns())
-
             ->filters([
                 Tables\Filters\SelectFilter::make('category')
                     ->relationship('category', 'title'),
                 Tables\Filters\Filter::make('Commercial')
-                    ->query(fn (Builder $query) : Builder => $query->where('commercial', true))
+                    ->query(fn(Builder $query): Builder => $query->where('commercial', true))
                     ->toggle(),
                 Tables\Filters\TrashedFilter::make(),
             ])
@@ -210,7 +204,7 @@ class PostResource extends Resource
     }
 
 
-    public static function getTableColumns() : array
+    public static function getTableColumns(): array
     {
         return [
 
@@ -223,7 +217,7 @@ class PostResource extends Resource
             Tables\Columns\TextColumn::make('title')
                 ->sortable()
                 ->searchable()
-                ->description(fn (Post $post) => $post->slug),
+                ->description(fn(Post $post) => $post->slug),
 
             Tables\Columns\TextColumn::make('category.title')
                 ->sortable()

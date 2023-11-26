@@ -36,7 +36,6 @@ class Post extends BaseModel implements Feedable, HasMedia
         'teaser',
         'published_at',
         'commercial',
-        'commercial',
     ];
 
     public function sluggable(): array
