@@ -22,9 +22,8 @@
             </p>
             <div class="flex items-center justify-between mt-6 article-actions-bar">
                 <div class="flex gap-x-2">
-                    @foreach ($post->categories as $category)
-                        <x-posts.category-badge :category="$category"/>
-                    @endforeach
+                    <x-posts.category-badge :category="$post->category"/>
+
                     <div class="flex items-center space-x-4">
 
                         <span class="text-sm text-gray-500">

@@ -57,7 +57,7 @@ class Post extends BaseModel implements Feedable, HasMedia
 
     public function scopeWithCategory($query, string $category): void
     {
-        $query->whereHas('categories', function ($query) use ($category) {
+        $query->whereHas('category', function ($query) use ($category) {
             $query->where('slug', $category);
         });
     }

@@ -6,7 +6,7 @@ namespace Database\Seeders;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Comment;
-use App\Models\Setting;
+use App\Models\Settings;
 use App\Models\Category;
 use Illuminate\Database\Seeder;
 
@@ -89,19 +89,14 @@ class DatabaseSeeder extends Seeder
                 'Display Cookie Notification Bar' => 'yes',
             ],
             'Code Integration' => [
-                'Add code between <head> & </head> of the frontend' => '',
-                'Add code before </body> of the frontend' => '',
+                'Add code between head the frontend' => '',
+                'Add code before body of the frontend' => '',
             ],
-
         ];
 
         foreach ($settings as $category => $keys) {
             foreach ($keys as $key => $value) {
-                Setting::query()->create([
-                    'category' => $category,
-                    'key' => $key,
-                    'value' => $value,
-                ]);
+                Settings::query()->create(compact('category', 'key', 'value'));
             }
         }
     }

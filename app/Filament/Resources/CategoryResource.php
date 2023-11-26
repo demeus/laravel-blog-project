@@ -23,38 +23,46 @@ class CategoryResource extends Resource
 
     protected static string|null $navigationGroup = 'Blog';
 
-
     protected static string|null $navigationIcon = 'heroicon-o-tag';
 
-    public static function form(Form $form) : Form
+    public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('title')
-                    ->live()
-                    ->required()->minLength(1)->maxLength(150)
-                    ->afterStateUpdated(function (string $operation, $state, Forms\Set $set) {
-                        if ('edit' === $operation) {
-                            return;
-                        }
+                Forms\Components\Section::make()
+                    ->schema([
+                        TextInput::make('title')
+                            ->live()
+                            ->required()->minLength(1)->maxLength(150)
+                            ->afterStateUpdated(function (string $operation, $state, Forms\Set $set) {
+                                if ('edit' === $operation) {
+                                    return;
+                                }
 
-                        $set('slug', Str::slug($state));
-                    }),
-                TextInput::make('slug')->required()->minLength(1)->unique(ignoreRecord: true)->maxLength(150),
-                TextInput::make('text_color')->nullable(),
-                TextInput::make('bg_color')->nullable(),
-                Toggle::make('status')
-                    ->label(__('categories.fields.is_visible'))
-                    ->default(VisibilityStatusEnum::ACTIVE->value)
-                    ->helperText(__('categories.fields.is_visible_help_text'))
-                    ->afterStateHydrated(function (Toggle $component, string $state) {
-                        $component->state($state == VisibilityStatusEnum::ACTIVE->value);
-                    })
-                    ->dehydrateStateUsing(fn (string $state) : string => $state ? VisibilityStatusEnum::ACTIVE->value : VisibilityStatusEnum::INACTIVE->value),
+                                $set('slug', Str::slug($state));
+                            }),
+                        TextInput::make('slug')
+                            ->required()
+                            ->minLength(1)
+                            ->unique(ignoreRecord: true)
+                            ->maxLength(150),
+                        TextInput::make('text_color')
+                            ->nullable(),
+                        TextInput::make('bg_color')
+                            ->nullable(),
+                        Toggle::make('status')
+                            ->label(__('categories.fields.is_visible'))
+                            ->default(VisibilityStatusEnum::ACTIVE->value)
+                            ->helperText(__('categories.fields.is_visible_help_text'))
+                            ->afterStateHydrated(function (Toggle $component, string $state) {
+                                $component->state($state == VisibilityStatusEnum::ACTIVE->value);
+                            })
+                            ->dehydrateStateUsing(fn(string $state): string => $state ? VisibilityStatusEnum::ACTIVE->value : VisibilityStatusEnum::INACTIVE->value),
+                    ]),
             ]);
     }
 
-    public static function table(Table $table) : Table
+    public static function table(Table $table): Table
     {
         return $table
             ->columns([
@@ -68,9 +76,9 @@ class CategoryResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make()->slideOver(),
+                Tables\Actions\EditAction::make()
+                    ->slideOver(),
             ])
-
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
@@ -78,28 +86,30 @@ class CategoryResource extends Resource
             ])
             ->striped()
             ->emptyStateActions([
-                Tables\Actions\CreateAction::make()->slideOver(),
+                Tables\Actions\CreateAction::make()
+                    ->slideOver(),
             ])
+            ->striped()
             ->deferLoading();
     }
 
-    public static function getRelations() : array
+    public static function getRelations(): array
     {
         return [
             //
         ];
     }
 
-    public static function getPages() : array
+    public static function getPages(): array
     {
         return [
             'index' => Pages\ListCategories::route('/'),
-            'create' => Pages\CreateCategory::route('/create'),
-            'edit' => Pages\EditCategory::route('/{record}/edit'),
+//            'create' => Pages\CreateCategory::route('/create'),
+//            'edit' => Pages\EditCategory::route('/{record}/edit'),
         ];
     }
 
-    public static function getEloquentQuery() : Builder
+    public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
             ->withoutGlobalScopes([
