@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -32,8 +34,8 @@ class Category extends Model
         ];
     }
 
-    public function posts() : BelongsToMany
+    public function posts():HasMany
     {
-        return $this->belongsToMany(Post::class);
+        return $this->hasMany(Post::class);
     }
 }

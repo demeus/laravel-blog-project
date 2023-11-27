@@ -27,10 +27,12 @@ class Post extends BaseModel implements Feedable, HasMedia
 
     protected $fillable = [
         'user_id',
+        'category_id',
         'title',
         'slug',
         'image',
         'body',
+        'tags',
         'teaser',
         'published_at',
         'commercial',
@@ -47,14 +49,14 @@ class Post extends BaseModel implements Feedable, HasMedia
 
     protected $casts = [
         'published_at' => 'datetime',
-        'commercial'   => 'boolean',
+        'commercial' => 'boolean',
+        'tags' => 'array',
     ];
-
 
 
     public function scopeWithCategory($query, string $category): void
     {
-        $query->whereHas('categories', function ($query) use ($category) {
+        $query->whereHas('category', function ($query) use ($category) {
             $query->where('slug', $category);
         });
     }
@@ -79,7 +81,7 @@ class Post extends BaseModel implements Feedable, HasMedia
     {
         return new Attribute(
             get: function () {
-                $words   = Str::wordCount(strip_tags($this->body));
+                $words = Str::wordCount(strip_tags($this->body));
                 $minutes = ceil($words / 200);
 
                 return $minutes . ' ' . str('min')->plural($minutes) . ', '

@@ -10,14 +10,13 @@ use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Columns\CheckboxColumn;
-use Filament\Tables\Columns\ImageColumn;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -41,8 +40,6 @@ class PostResource extends Resource
                 'md' => 1,
                 'lg' => 3,
             ]);
-
-
     }
 
     public static function getFormComponents(): array
@@ -91,7 +88,6 @@ class PostResource extends Resource
                 ]),
             Forms\Components\Section::make('Metadata')
                 ->schema([
-
                     Select::make('user_id')
                         ->relationship('author', 'name')
                         ->searchable()
@@ -110,12 +106,12 @@ class PostResource extends Resource
                         ->visibility('public'),
 
 //                    FileUpload::make('image')->image()->directory('posts/thumbnails'),
-                    Forms\Components\Textarea::make('description')
+                    Textarea::make('description')
                         ->maxLength(65535)
                         ->rows(5)
                         ->helperText('A short description used on the blog, social previews, and Google.'),
 
-                    Forms\Components\Toggle::make('commercial')
+                    Toggle::make('commercial')
                         ->label('Is a commercial article')
                         ->helperText('If checked, the UI will focus on conversion.'),
 
@@ -124,10 +120,12 @@ class PostResource extends Resource
                         ->timezone('UTC')
                         ->helperText('When not set, the article is considered as a draft.'),
 
+                    TagsInput::make('tags'),
 
-                    Select::make('categories')
-                        ->multiple()
-                        ->relationship('categories', 'title')
+
+                    Select::make('category_id')
+                        ->relationship('category', 'title')
+                        ->preload()
                         ->searchable(),
 
                     Forms\Components\Group::make()
@@ -140,7 +138,8 @@ class PostResource extends Resource
                                 ->label('Last modified at')
                                 ->content(fn(Post $post): string|null => $post->updated_at?->isoFormat('LLL')),
                         ])
-                        ->hidden(fn(Post|null $post) => $post === null),
+                        ->hidden(fn(Post $post) => !$post->exists),  //
+
                 ])
                 ->collapsible()
                 ->columnSpan([
@@ -180,13 +179,11 @@ class PostResource extends Resource
     {
         return $table
             ->columns(static::getTableColumns())
-
             ->filters([
-                Tables\Filters\SelectFilter::make('categories')
-                    ->relationship('categories', 'title')
-                    ->multiple(),
+                Tables\Filters\SelectFilter::make('category')
+                    ->relationship('category', 'title'),
                 Tables\Filters\Filter::make('Commercial')
-                    ->query(fn (Builder $query) : Builder => $query->where('commercial', true))
+                    ->query(fn(Builder $query): Builder => $query->where('commercial', true))
                     ->toggle(),
                 Tables\Filters\TrashedFilter::make(),
             ])
@@ -207,7 +204,7 @@ class PostResource extends Resource
     }
 
 
-    public static function getTableColumns() : array
+    public static function getTableColumns(): array
     {
         return [
 
@@ -220,7 +217,11 @@ class PostResource extends Resource
             Tables\Columns\TextColumn::make('title')
                 ->sortable()
                 ->searchable()
-                ->description(fn (Post $post) => $post->slug),
+                ->description(fn(Post $post) => $post->slug),
+
+            Tables\Columns\TextColumn::make('category.title')
+                ->sortable()
+                ->searchable(),
 
             Tables\Columns\TextColumn::make('author.name')
                 ->sortable()

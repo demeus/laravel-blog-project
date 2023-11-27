@@ -4,10 +4,12 @@ namespace App\Models\Concerns;
 
 use App\Models\Category;
 use App\Models\Comment;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait HasRelationships
 {
@@ -16,10 +18,20 @@ trait HasRelationships
         return $this->belongsTo(User::class);
     }
 
-    public function categories() : BelongsToMany
+    public function category(): BelongsTo
     {
-        return $this->belongsToMany(Category::class);
+        return $this->belongsTo(Category::class);
     }
+
+    public function tags(): MorphMany
+    {
+        return $this->morphMany(Tag::class, 'taggable');
+    }
+
+//    public function categories() : BelongsToMany
+//    {
+//        return $this->belongsToMany(Category::class);
+//    }
 
 
     public function author(): BelongsTo

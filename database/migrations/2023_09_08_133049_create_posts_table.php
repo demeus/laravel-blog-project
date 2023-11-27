@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -15,11 +16,13 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Category::class)->constrained()->cascadeOnDelete();
             $table->string('image')->nullable();
             $table->string('title')->index();
             $table->string('slug')->unique();
             $table->text('body')->nullable();
             $table->text('teaser')->nullable();
+            $table->json('tags')->nullable();
             $table->timestamp('published_at')->nullable();
             $table->boolean('commercial')->default(false);
             $table->softDeletes();

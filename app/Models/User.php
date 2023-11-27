@@ -4,6 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Jetstream\HasProfilePhoto;
 use Illuminate\Notifications\Notifiable;
@@ -91,18 +93,19 @@ class User extends Authenticatable implements FilamentUser
         'profile_photo_url',
     ];
 
-    public function likes()
+    public function likes(): BelongsToMany
     {
         return $this->belongsToMany(Post::class, 'post_like')->withTimestamps();
     }
 
-    public function hasLiked(Post $post)
+    public function hasLiked(Post $post): bool
     {
         return $this->likes()->where('post_id', $post->id)->exists();
     }
 
-    public function comments()
+    public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
     }
+
 }
