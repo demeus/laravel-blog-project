@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(Post::class);
             $table->string('comment');
-            $table->integer('status')->default(CommentStatus::Pending); // исправлено на integer
+            $table->string('status')->default(CommentStatus::Pending);
             $table->timestamps();
         });
     }

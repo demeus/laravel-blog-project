@@ -25,7 +25,7 @@ class ListPosts extends ListRecords
         return [
             'Published' => Tab::make()
                 ->query(fn (Builder $query) => $query->published()),
-            'Draft' => \Filament\Resources\Components\Tab::make()
+            'Draft' => Tab::make()
                 ->query(fn (Builder $query) => $query->unpublished()),
         ];
     }

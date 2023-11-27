@@ -188,7 +188,7 @@ class PostResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->slideOver(),
             ])
             ->emptyStateActions([
                 Tables\Actions\CreateAction::make(),
@@ -260,8 +260,8 @@ class PostResource extends Resource
     {
         return [
             'index'  => Pages\ListPosts::route('/'),
-            'create' => Pages\CreatePost::route('/create'),
-            'edit'   => Pages\EditPost::route('/{record}/edit'),
+//            'create' => Pages\CreatePost::route('/create'),
+//            'edit'   => Pages\EditPost::route('/{record}/edit'),
         ];
     }
 

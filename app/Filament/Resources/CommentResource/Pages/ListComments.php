@@ -2,9 +2,12 @@
 
 namespace App\Filament\Resources\CommentResource\Pages;
 
+use App\Enums\CommentStatus;
 use Filament\Actions;
+use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
 use App\Filament\Resources\CommentResource;
+use Illuminate\Database\Eloquent\Builder;
 
 class ListComments extends ListRecords
 {
@@ -15,5 +18,30 @@ class ListComments extends ListRecords
         return [
             Actions\CreateAction::make(),
         ];
+    }
+
+
+    public function getTabs() : array
+    {
+//        return [
+//            null => Tab::make('All'),
+//            'new' => Tab::make()->query(fn ($query) => $query->where('status', 'new')),
+//            'processing' => ListRecords\Tab::make()->query(fn ($query) => $query->where('status', 'processing')),
+//            'shipped' => ListRecords\Tab::make()->query(fn ($query) => $query->where('status', 'shipped')),
+//            'delivered' => ListRecords\Tab::make()->query(fn ($query) => $query->where('status', 'delivered')),
+//            'cancelled' => ListRecords\Tab::make()->query(fn ($query) => $query->where('status', 'cancelled')),
+//        ];
+//    }
+
+        $tabs = [
+            null => Tab::make('All'),
+        ];
+        $statuses = CommentStatus::all();
+        foreach ($statuses as $status) {
+            $tabs[$status->name] = Tab::make()
+                ->query(fn (Builder $query) => $query->where('status', $status->value));
+        }
+
+        return $tabs;
     }
 }
