@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\RoleEnum;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -22,34 +23,6 @@ class User extends Authenticatable implements FilamentUser
     use Notifiable;
     use TwoFactorAuthenticatable;
 
-    const ROLE_ADMIN = 'ADMIN';
-
-    const ROLE_EDITOR = 'EDITOR';
-
-    const ROLE_USER = 'USER';
-
-    const ROLE_DEFAULT = self::ROLE_USER;
-
-    const ROLES = [
-        self::ROLE_ADMIN => 'Admin',
-        self::ROLE_EDITOR => 'Editor',
-        self::ROLE_USER => 'User',
-    ];
-
-    public function canAccessPanel(Panel $panel) : bool
-    {
-        return $this->can('view-admin', User::class);
-    }
-
-    public function isAdmin()
-    {
-        return self::ROLE_ADMIN === $this->role;
-    }
-
-    public function isEditor()
-    {
-        return self::ROLE_EDITOR === $this->role;
-    }
 
     /**
      * The attributes that are mass assignable.
@@ -82,6 +55,7 @@ class User extends Authenticatable implements FilamentUser
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'role' => RoleEnum::class,
     ];
 
     /**
@@ -92,6 +66,36 @@ class User extends Authenticatable implements FilamentUser
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public const ROLE_ADMIN = 'ADMIN';
+    public const ROLE_EDITOR = 'EDITOR';
+    public const ROLE_USER = 'USER';
+
+    public const ROLE_DEFAULT = self::ROLE_USER;
+
+    public const ROLES = [
+        self::ROLE_ADMIN => 'Admin',
+        self::ROLE_EDITOR => 'Editor',
+        self::ROLE_USER => 'User',
+    ];
+
+
+    public function canAccessPanel(Panel $panel) : bool
+    {
+        return $this->can('view-admin', self::class);
+    }
+
+    public function isAdmin(): bool
+    {
+        return self::ROLE_ADMIN === $this->role->value;
+    }
+
+    public function isEditor(): bool
+    {
+        return self::ROLE_EDITOR === $this->role->value;
+    }
+
+
 
     public function likes(): BelongsToMany
     {

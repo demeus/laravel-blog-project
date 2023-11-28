@@ -20,6 +20,7 @@ class SettingsResource extends Resource
     protected static string|null $navigationGroup = 'Settings';
 
 
+
     public static function form(Form $form): Form
     {
         $settings = Settings::all()->groupBy('category');

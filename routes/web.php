@@ -1,27 +1,26 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PostController;
+use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
 
 Route::get('/', HomeController::class)->name('home');
 
 Route::get('/blog', [PostController::class, 'index'])->name('posts.index');
 
 Route::get('/blog/{post:slug}', [PostController::class, 'show'])->name('posts.show');
-Route::get('/about-us', [PageController::class, 'about'])->name('about-us');
+
+Route::view('/about-us', 'about')->name('about');
+
+Route::view('/privacy', 'privacy')->name('privacy');
+
+Route::view('/policy', 'policy')->name('policy');
+
+Route::view('/terms', 'terms')->name('terms');
+
+Route::get('/{page:slug}', [PageController::class, 'show'])->name('pages.show');
 
 Route::middleware([
     'auth:sanctum',

@@ -6,7 +6,12 @@
             </div>
 
             <div class="w-full sm:max-w-2xl mt-6 p-6 bg-white shadow-md overflow-hidden sm:rounded-lg prose">
-                {!! Str::markdown(file_get_contents(resource_path('markdown/policy.md'))) !!}
+
+                <x-prose class="mt-8">
+                    {!! Str::markdown(file_get_contents(resource_path('markdown/about.md'))) !!}
+                </x-prose>
+
+
             </div>
         </div>
     </div>
