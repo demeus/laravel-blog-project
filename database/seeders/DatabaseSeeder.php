@@ -131,6 +131,7 @@ class DatabaseSeeder extends Seeder
                 'title'       => $page['title'],
                 'description' => $page['description'],
                 'content'     => $page['content'],
+                'user_id'     => User::find(1)->id,
             ]);
         }
     }

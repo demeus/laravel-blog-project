@@ -1,35 +1,31 @@
 <?php
 
-namespace App\Filament\Resources\PostResource\Widgets;
+namespace App\Filament\Resources\CommentResource\Widgets;
 
-use App\Models\Post;
+use App\Models\Comment;
 use Filament\Widgets\ChartWidget;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
 
-class PostsPerMonthChart extends ChartWidget
+class CommentsPerMonthChart extends ChartWidget
 {
-    protected static string|null $heading = 'Blog posts';
-
-    protected static int|null $contentHeight = 300;
-
+    protected static string|null $heading = 'Comments';
 
     protected function getData(): array
     {
-
-        $data = Trend::model(Post::class)
+        $data = Trend::model(Comment::class)
             ->between(
                 start: now()->startOfYear(),
                 end: now()->endOfYear(),
             )
             ->perMonth()
-            ->dateColumn('published_at')
+            ->dateColumn('created_at')
             ->count();
 
         return [
             'datasets' => [
                 [
-                    'label' => 'Blog posts',
+                    'label' => 'Comments',
                     'data'  => $data->map(fn(TrendValue $value) => $value->aggregate),
                 ],
             ],

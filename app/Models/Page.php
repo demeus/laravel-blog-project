@@ -6,9 +6,7 @@ use App\Models\Concerns\HasLocalScopes;
 use App\Models\Concerns\HasMediaAttached;
 use App\Models\Concerns\HasRelationships;
 use Cviebrock\EloquentSluggable\Sluggable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Spatie\Feed\Feedable;
 use Spatie\MediaLibrary\HasMedia;
 
 class Page extends BaseModel implements HasMedia
@@ -26,7 +24,8 @@ class Page extends BaseModel implements HasMedia
         'title',
         'slug',
         'image',
-        'body',
+        'content',
+        'description',
     ];
 
     public function sluggable(): array

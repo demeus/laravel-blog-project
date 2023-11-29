@@ -2,27 +2,28 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Resources\CommentResource\Widgets\CommentsPerMonthChart;
+use App\Filament\Resources\CommentResource\Widgets\LatestCommentsWidget;
+use App\Filament\Resources\PostResource\Widgets\PostsPerMonthChart;
+use App\Filament\Resources\UserResource\Widgets\UserStatsWidget;
+use Filament\Http\Middleware\Authenticate;
+use Filament\Http\Middleware\DisableBladeIconComponents;
+use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Http\Middleware\Authenticate;
-use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
+use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Filament\Http\Middleware\DisableBladeIconComponents;
-use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
-use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
-use App\Filament\Resources\UserResource\Widgets\UserStatsWidget;
-use App\Filament\Resources\PostResource\Widgets\PostsPerMonthChart;
-use App\Filament\Resources\CommentResource\Widgets\LatestCommentsWidget;
 
 class AdminPanelProvider extends PanelProvider
 {
-    public function panel(Panel $panel) : Panel
+    public function panel(Panel $panel): Panel
     {
         return $panel
             ->default()
@@ -42,6 +43,7 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 UserStatsWidget::class,
                 PostsPerMonthChart::class,
+                CommentsPerMonthChart::class,
                 LatestCommentsWidget::class,
             ])
             ->middleware([

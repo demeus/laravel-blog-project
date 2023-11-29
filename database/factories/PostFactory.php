@@ -3,12 +3,13 @@
 namespace Database\Factories;
 
 use App\Models\Category;
+use App\Models\Post;
 use App\Models\User;
 use Database\Seeders\CategorySeeder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Post>
+ * @extends Factory<Post>
  */
 class PostFactory extends Factory
 {
@@ -26,13 +27,13 @@ class PostFactory extends Factory
         }
 
         return [
-            'user_id' => User::factory(),
-            'category_id' => Category::all()->random()->id, // Assign a random existing category
-            'title' => $this->faker->sentence(),
-            'image' => $this->faker->imageUrl(),
-            'body' => $this->faker->paragraph(10),
-            'published_at' => $this->faker->dateTimeBetween('-1 Week', '+1 week'),
-            'commercial' => $this->faker->boolean(10),
+            'user_id'      => User::factory(),
+            'category_id'  => Category::all()->random()->id, // Assign a random existing category
+            'title'        => $this->faker->sentence(),
+            'image'        => $this->faker->imageUrl(),
+            'body'         => $this->faker->paragraph(10),
+            'published_at' => $this->faker->dateTimeBetween('-10 month', '+1 month'),
+            'commercial'   => $this->faker->boolean(10),
         ];
     }
 }
