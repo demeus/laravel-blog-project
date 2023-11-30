@@ -80,9 +80,7 @@ class CategoryResource extends Resource
                 ColorColumn::make('text_color')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('bg_color')
-                    ->sortable()
-                    ->searchable(),
+
             ])
             ->filters([
                 //
