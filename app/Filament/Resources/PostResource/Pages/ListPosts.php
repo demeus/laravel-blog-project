@@ -2,31 +2,32 @@
 
 namespace App\Filament\Resources\PostResource\Pages;
 
-use Filament\Actions;
 use App\Filament\Resources\PostResource;
+use Filament\Actions;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
-use App\Filament\Resources\PostResource\Widgets\PostsPerMonthChart;
 use Illuminate\Database\Eloquent\Builder;
 
 class ListPosts extends ListRecords
 {
     protected static string $resource = PostResource::class;
 
-    protected function getHeaderActions() : array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),
         ];
     }
 
-    public function getTabs() : array
+    public function getTabs(): array
     {
         return [
             'Published' => Tab::make()
-                ->query(fn (Builder $query) => $query->published()),
-            'Draft' => Tab::make()
-                ->query(fn (Builder $query) => $query->unpublished()),
+                ->icon('heroicon-o-document-check')
+                ->query(fn(Builder $query) => $query->published()),
+            'Draft'     => Tab::make()
+                ->icon('heroicon-o-pencil-square')
+                ->query(fn(Builder $query) => $query->unpublished()),
         ];
     }
 

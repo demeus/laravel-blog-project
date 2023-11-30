@@ -38,35 +38,25 @@ class DatabaseSeeder extends Seeder
     {
         $categories = [
             [
-                'title'      => 'Technology',
-                'text_color' => 'text-red-500',
-                'bg_color'   => 'bg-red-300',
-                'icon'       => 'technology',
+                'title' => 'Technology',
+                'icon'  => 'technology',
             ],
             [
-                'title'      => 'Programming',
-                'text_color' => 'text-blue-500',
-                'bg_color'   => 'bg-blue-300',
-                'icon'       => 'programming',
+                'title' => 'Programming',
+                'icon'  => 'programming',
             ],
             [
-                'title'      => 'Hardware',
-                'text_color' => 'text-green-500',
-                'bg_color'   => 'bg-green-300',
-                'icon'       => 'hardware',
+                'title' => 'Hardware',
+                'icon'  => 'hardware',
             ],
             [
-                'title'      => 'Software',
-                'text_color' => 'text-yellow-500',
-                'bg_color'   => 'bg-yellow-300',
-                'icon'       => 'software',
+                'title' => 'Software',
+                'icon'  => 'software',
             ],
 
             [
-                'title'      => 'Tutorials',
-                'text_color' => 'text-indigo-500',
-                'bg_color'   => 'bg-indigo-300',
-                'icon'       => 'tutorials',
+                'title' => 'Tutorials',
+                'icon'  => 'tutorials',
             ],
 
         ];

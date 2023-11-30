@@ -7,6 +7,7 @@ use App\Filament\Resources\PostResource\RelationManagers\CommentsRelationManager
 use App\Models\Post;
 use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
@@ -69,6 +70,8 @@ class PostResource extends Resource
                         ->columnSpanFull()
                         ->helperText('An overview of the article used in the feed with the intent to entice readers to click through.'),
 
+                    KeyValue::make('meta')
+                        ->reorderable()
 //                    SpatieMediaLibraryFileUpload::make('images')
 //                        ->collection('images')
 //                        ->conversion('medium')
@@ -146,33 +149,6 @@ class PostResource extends Resource
                     'lg' => 1,
                 ])
         ];
-//        return $form
-//            ->schema([
-//                Section::make('Main Content')->schema(
-//                    [
-//
-//                        TextInput::make('slug')->required()->minLength(1)->unique(ignoreRecord: true)->maxLength(150),
-//                        RichEditor::make('body')
-//                            ->required()
-//                            ->fileAttachmentsDirectory('posts/images')->columnSpanFull(),
-//                    ]
-//                )->columns(2),
-//                Section::make('Meta')->schema(
-//                    [
-//                        FileUpload::make('image')->image()->directory('posts/thumbnails'),
-//                        DateTimePicker::make('published_at')->nullable(),
-//                        Checkbox::make('featured'),
-//                        Select::make('user_id')
-//                            ->relationship('author', 'name')
-//                            ->searchable()
-//                            ->required(),
-//                        Select::make('categories')
-//                            ->multiple()
-//                            ->relationship('categories', 'title')
-//                            ->searchable(),
-//                    ]
-//                ),
-//            ]);
     }
 
     public static function table(Table $table): Table
@@ -260,8 +236,8 @@ class PostResource extends Resource
     {
         return [
             'index'  => Pages\ListPosts::route('/'),
-//            'create' => Pages\CreatePost::route('/create'),
-//            'edit'   => Pages\EditPost::route('/{record}/edit'),
+            'create' => Pages\CreatePost::route('/create'),
+            'edit'   => Pages\EditPost::route('/{record}/edit'),
         ];
     }
 
