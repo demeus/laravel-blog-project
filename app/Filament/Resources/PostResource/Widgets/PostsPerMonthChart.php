@@ -6,6 +6,7 @@ use App\Models\Post;
 use Filament\Widgets\ChartWidget;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
+use Illuminate\Support\Carbon;
 
 class PostsPerMonthChart extends ChartWidget
 {
@@ -16,7 +17,6 @@ class PostsPerMonthChart extends ChartWidget
 
     protected function getData(): array
     {
-
         $data = Trend::model(Post::class)
             ->between(
                 start: now()->startOfYear(),
@@ -33,7 +33,7 @@ class PostsPerMonthChart extends ChartWidget
                     'data'  => $data->map(fn(TrendValue $value) => $value->aggregate),
                 ],
             ],
-            'labels'   => $data->map(fn(TrendValue $value) => $value->date),
+            'labels'   => $data->map(fn(TrendValue $value) => Carbon::parse($value->date)->format('M')),
         ];
     }
 

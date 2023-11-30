@@ -2,20 +2,22 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Forms;
-use Filament\Tables;
-use App\Models\Category;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
-use Illuminate\Support\Str;
-use Filament\Resources\Resource;
 use App\Enums\VisibilityStatusEnum;
-use Filament\Forms\Components\Toggle;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
-use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\CategoryResource\Pages;
+use App\Models\Category;
+use Filament\Forms;
+use Filament\Forms\Components\ColorPicker;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Columns\ColorColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class CategoryResource extends Resource
 {
@@ -46,10 +48,9 @@ class CategoryResource extends Resource
                             ->minLength(1)
                             ->unique(ignoreRecord: true)
                             ->maxLength(150),
-                        TextInput::make('text_color')
+                        ColorPicker::make('text_color')
                             ->nullable(),
-                        TextInput::make('bg_color')
-                            ->nullable(),
+
                         Toggle::make('status')
                             ->label(__('categories.fields.is_visible'))
                             ->default(VisibilityStatusEnum::ACTIVE->value)
@@ -57,7 +58,7 @@ class CategoryResource extends Resource
                             ->afterStateHydrated(function (Toggle $component, string $state) {
                                 $component->state($state == VisibilityStatusEnum::ACTIVE->value);
                             })
-                            ->dehydrateStateUsing(fn(string $state): string => $state ? VisibilityStatusEnum::ACTIVE->value : VisibilityStatusEnum::INACTIVE->value),
+                            ->dehydrateStateUsing(fn(string $state): string => $state ? VisibilityStatusEnum::ACTIVE->value : VisibilityStatusEnum::DISABLED->value),
                     ]),
             ]);
     }
@@ -75,7 +76,8 @@ class CategoryResource extends Resource
                 TextColumn::make('posts_count')
                     ->counts('posts')
                     ->sortable(),
-                TextColumn::make('text_color')
+
+                ColorColumn::make('text_color')
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('bg_color')

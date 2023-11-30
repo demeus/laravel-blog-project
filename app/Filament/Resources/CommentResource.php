@@ -8,7 +8,6 @@ use App\Models\Comment;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -64,6 +63,13 @@ class CommentResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->description(fn(Comment $comment) => $comment->comment),
+
+                TextColumn::make('created_at')
+                    ->label('Created')
+                    ->date('d.m.Y H:i')
+                    ->sortable()
+                    ->searchable(),
+
             ])
             ->filters([
                 //
@@ -95,9 +101,9 @@ class CommentResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListComments::route('/'),
+            'index' => Pages\ListComments::route('/'),
 //            'create' => Pages\CreateComment::route('/create'),
-            'edit'   => Pages\EditComment::route('/{record}/edit'),
+            'edit'  => Pages\EditComment::route('/{record}/edit'),
         ];
     }
 }

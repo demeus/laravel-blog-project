@@ -6,6 +6,7 @@ use App\Models\Comment;
 use Filament\Widgets\ChartWidget;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
+use Illuminate\Support\Carbon;
 
 class CommentsPerMonthChart extends ChartWidget
 {
@@ -29,7 +30,7 @@ class CommentsPerMonthChart extends ChartWidget
                     'data'  => $data->map(fn(TrendValue $value) => $value->aggregate),
                 ],
             ],
-            'labels'   => $data->map(fn(TrendValue $value) => $value->date),
+            'labels'   => $data->map(fn(TrendValue $value) => Carbon::parse($value->date)->format('M')),
         ];
     }
 
