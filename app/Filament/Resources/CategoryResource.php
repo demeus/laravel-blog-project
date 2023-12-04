@@ -37,7 +37,7 @@ class CategoryResource extends Resource
                             ->live()
                             ->required()->minLength(1)->maxLength(150)
                             ->afterStateUpdated(function (string $operation, $state, Forms\Set $set) {
-                                if ('edit' === $operation) {
+                                if ($operation === 'edit') {
                                     return;
                                 }
 
@@ -50,6 +50,9 @@ class CategoryResource extends Resource
                             ->maxLength(150),
                         ColorPicker::make('text_color')
                             ->nullable(),
+
+                        \App\Forms\Components\ColorPicker::make('text_color')
+                        ,
 
                         Toggle::make('status')
                             ->label(__('categories.fields.is_visible'))
@@ -114,8 +117,8 @@ class CategoryResource extends Resource
     {
         return [
             'index' => Pages\ListCategories::route('/'),
-//            'create' => Pages\CreateCategory::route('/create'),
-//            'edit' => Pages\EditCategory::route('/{record}/edit'),
+            'create' => Pages\CreateCategory::route('/create'),
+            'edit' => Pages\EditCategory::route('/{record}/edit'),
         ];
     }
 
