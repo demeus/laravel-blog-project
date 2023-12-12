@@ -12,6 +12,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
+use Illuminate\Support\Facades\Blade;
 
 class ManageGeneralSettings extends SettingsPage
 {
@@ -55,12 +56,8 @@ class ManageGeneralSettings extends SettingsPage
                             ->required(),
                         Select::make('datetime_format')
                             ->label('Datetime Format')
-                            ->options([
-                                'Y-m-d H:i:s' => 'Y-m-d H:i:s <span class="text-gray-500">(' . date('Y-m-d H:i:s') . ')</span>',
-                                'm/d/Y h:i A' => 'm/d/Y h:i A <span class="text-gray-500">(' . date('m/d/Y h:i A') . ')</span>',
-                                'd/m/Y H:i'   => 'd/m/Y H:i <span class="text-gray-500">(' . date('d/m/Y H:i') . ')</span>',
-                                'j M Y G:i'   => 'j M Y G:i <span class="text-gray-500">(' . date('j M Y G:i') . ')</span>',
-                            ])
+                            ->options($this->getDatetimeFormatOptions('primary'))
+                            ->native(false)
                             ->required()
                             ->allowHtml(),
 
@@ -74,5 +71,34 @@ class ManageGeneralSettings extends SettingsPage
 
                     ]),
             ]);
+    }
+
+
+    private function getDatetimeFormatOptions(): array
+    {
+        $color = 'rounded-md bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700 ring-1 ';
+
+        $formats = [
+            'Y-m-d H:i:s',
+            'm/d/Y h:i A',
+            'd/m/Y H:i',
+            'j M Y G:i'
+        ];
+
+        $options = [];
+
+        foreach ($formats as $format) {
+            $dateTime = date($format);
+            $badge = sprintf('<span class="%s">%s</span>',
+                $color,
+                e($dateTime)
+            );
+
+            // create label with date format text and the styled badge.
+            $optionLabel = sprintf('%s %s', $format, $badge);
+            $options[$format] = $optionLabel;
+        }
+
+        return $options;
     }
 }
