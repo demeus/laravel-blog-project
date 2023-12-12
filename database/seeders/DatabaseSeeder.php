@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->createAdminUser();
         $this->createCategories();
-        $this->createSettings();
+//        $this->createSettings();
         $this->createPosts();
         $this->createPages();
     }
