@@ -19,7 +19,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 class PageResource extends Resource
@@ -28,7 +27,7 @@ class PageResource extends Resource
 
     protected static string|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function form(Form $form) : Form
+    public static function form(Form $form): Form
     {
         return $form
             ->schema(static::getFormComponents())
@@ -37,6 +36,7 @@ class PageResource extends Resource
                 'lg' => 3,
             ]);
     }
+
     public static function getFormComponents(): array
     {
         return [
@@ -61,7 +61,7 @@ class PageResource extends Resource
                         ->unique(ignoreRecord: true)
                         ->maxLength(150),
 
-                    RichEditor::make('body')
+                    RichEditor::make('content')
                         ->required()
                         ->fileAttachmentsDirectory('Pages/images')
                         ->columnSpanFull(),
@@ -86,7 +86,7 @@ class PageResource extends Resource
                     SpatieMediaLibraryFileUpload::make('image')
                         ->collection('image')
                         ->conversion('medium')
-                        ->disk('media-library')
+                        ->disk('local')
                         ->downloadable()
                         ->imageCropAspectRatio('16:9')
                         ->imageEditor()
@@ -124,11 +124,10 @@ class PageResource extends Resource
 
     }
 
-    public static function table(Table $table) : Table
+    public static function table(Table $table): Table
     {
         return $table
             ->columns(static::getTableColumns())
-
             ->filters([
                 //
             ])
@@ -167,7 +166,6 @@ class PageResource extends Resource
                 ->description(fn(Page $page) => $page->slug),
 
 
-
             TextColumn::make('author.name')
                 ->sortable()
                 ->searchable(),
@@ -186,19 +184,19 @@ class PageResource extends Resource
         ];
     }
 
-    public static function getRelations() : array
+    public static function getRelations(): array
     {
         return [
             //
         ];
     }
 
-    public static function getPages() : array
+    public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPages::route('/'),
+            'index'  => Pages\ListPages::route('/'),
             'create' => Pages\CreatePage::route('/create'),
-            'edit' => Pages\EditPage::route('/{record}/edit'),
+            'edit'   => Pages\EditPage::route('/{record}/edit'),
         ];
     }
 }

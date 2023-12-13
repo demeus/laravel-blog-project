@@ -15,7 +15,6 @@ class Page extends BaseModel implements HasMedia
     use Sluggable;
     use HasMediaAttached;
     use HasLocalScopes;
-    use HasMediaAttached;
     use HasRelationships;
 
 
