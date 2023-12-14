@@ -10,6 +10,5 @@ return new class extends SettingsMigration
             'name' => 'Google tag',
             'code' => '',
         ]);
-
     }
 };

@@ -22,6 +22,7 @@ class GeneralSettings extends Settings
 
 
 
+    #[\Override]
     public static function group(): string
     {
         return 'general';
