@@ -6,8 +6,7 @@ use Spatie\LaravelSettings\Settings;
 
 class CodeIntegration extends Settings
 {
-
-    public static function group(): string
+    public static function group() : string
     {
         return 'code';
     }
