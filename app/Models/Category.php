@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use Cviebrock\EloquentSluggable\Sluggable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Category extends Model
 {
@@ -22,7 +22,7 @@ class Category extends Model
         'status',
     ];
 
-    public function sluggable(): array
+    public function sluggable() : array
     {
         return [
             'slug' => [
@@ -31,7 +31,7 @@ class Category extends Model
         ];
     }
 
-    public function posts(): HasMany
+    public function posts() : HasMany
     {
         return $this->hasMany(Post::class);
     }

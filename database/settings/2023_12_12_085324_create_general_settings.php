@@ -2,9 +2,8 @@
 
 use Spatie\LaravelSettings\Migrations\SettingsMigration;
 
-return new class extends SettingsMigration
-{
-    public function up(): void
+return new class extends SettingsMigration {
+    public function up() : void
     {
         $this->migrator->add('general.site_name', 'Laravel');
         $this->migrator->add('general.site_description', 'This is a description of the site.');

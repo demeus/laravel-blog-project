@@ -2,10 +2,10 @@
 
 namespace App\View\Components\Site;
 
-use App\Settings\FooterSettings;
 use Closure;
-use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use App\Settings\FooterSettings;
+use Illuminate\Contracts\View\View;
 
 class Footer extends Component
 {
@@ -21,28 +21,26 @@ class Footer extends Component
      * Get the view / contents that represent the component.
      */
     #[\Override]
-    public function render(): View|Closure|string
+    public function render() : View|Closure|string
     {
-        return view('components.site.footer',[
+        return view('components.site.footer', [
             'links' => $this->getFooterLinksProperty(),
             'show_copyright' => $this->showCopyrightProperty(),
             'copyright' => $this->getCopyrightProperty(),
         ]);
     }
 
-    /**
-     * @return array|null
-     */
-    private function getFooterLinksProperty(): array|null
+    private function getFooterLinksProperty() : ?array
     {
         return app(FooterSettings::class)->links;
     }
 
-    private function getCopyrightProperty(): string|null
+    private function getCopyrightProperty() : ?string
     {
         return app(FooterSettings::class)->copyright;
     }
-    private function showCopyrightProperty(): string|null
+
+    private function showCopyrightProperty() : ?string
     {
         return app(FooterSettings::class)->show_copyright;
     }

@@ -3,16 +3,16 @@
 namespace App\Filament\Resources\CommentResource\Widgets;
 
 use App\Models\Comment;
-use Filament\Widgets\ChartWidget;
 use Flowframe\Trend\Trend;
-use Flowframe\Trend\TrendValue;
 use Illuminate\Support\Carbon;
+use Flowframe\Trend\TrendValue;
+use Filament\Widgets\ChartWidget;
 
 class CommentsPerMonthChart extends ChartWidget
 {
-    protected static string|null $heading = 'Comments';
+    protected static ?string $heading = 'Comments';
 
-    protected function getData(): array
+    protected function getData() : array
     {
         $data = Trend::model(Comment::class)
             ->between(
@@ -27,14 +27,14 @@ class CommentsPerMonthChart extends ChartWidget
             'datasets' => [
                 [
                     'label' => 'Comments',
-                    'data'  => $data->map(fn(TrendValue $value) => $value->aggregate),
+                    'data' => $data->map(fn (TrendValue $value) => $value->aggregate),
                 ],
             ],
-            'labels'   => $data->map(fn(TrendValue $value) => Carbon::parse($value->date)->format('M')),
+            'labels' => $data->map(fn (TrendValue $value) => Carbon::parse($value->date)->format('M')),
         ];
     }
 
-    protected function getType(): string
+    protected function getType() : string
     {
         return 'line';
     }

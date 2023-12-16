@@ -2,32 +2,30 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\AdvertisementResource\Pages;
-use App\Filament\Resources\AdvertisementResource\RelationManagers;
+use Filament\Tables;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
 use App\Models\Advertisement;
-use Filament\Forms\Components\DateTimePicker;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DateTimePicker;
+use App\Filament\Resources\AdvertisementResource\Pages;
 
 class AdvertisementResource extends Resource
 {
-    protected static int|null $navigationSort = 2;
+    protected static ?int $navigationSort = 2;
 
-    protected static string|null $navigationGroup = 'Advertisement';
+    protected static ?string $navigationGroup = 'Advertisement';
 
+    protected static ?string $model = Advertisement::class;
 
-    protected static string|null $model = Advertisement::class;
+    protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
 
-    protected static string|null $navigationIcon = 'heroicon-o-currency-dollar';
-
-    public static function form(Form $form): Form
+    public static function form(Form $form) : Form
     {
         return $form
             ->schema(static::getFormComponents())
@@ -37,7 +35,7 @@ class AdvertisementResource extends Resource
             ]);
     }
 
-    public static function getFormComponents(): array
+    public static function getFormComponents() : array
     {
         return [
             Section::make('Content')
@@ -60,7 +58,6 @@ class AdvertisementResource extends Resource
             Section::make('Settings')
                 ->schema([
 
-
                     TextInput::make('height')
                         ->numeric(),
 
@@ -71,27 +68,23 @@ class AdvertisementResource extends Resource
                         ->label('Status')
                         ->helperText('Enable or disable .'),
 
-
                     DateTimePicker::make('start_date')
                         ->timezone('UTC')
                         ->helperText('When not set, the article is considered as a draft.'),
 
-
                     DateTimePicker::make('end_date')
                         ->after('start_date')
-                        ->timezone('UTC')
-                    ,
-
+                        ->timezone('UTC'),
 
                 ])
                 ->collapsible()
                 ->columnSpan([
                     'lg' => 1,
-                ])
+                ]),
         ];
     }
 
-    public static function table(Table $table): Table
+    public static function table(Table $table) : Table
     {
         return $table
             ->columns([
@@ -125,19 +118,19 @@ class AdvertisementResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
+    public static function getRelations() : array
     {
         return [
             //
         ];
     }
 
-    public static function getPages(): array
+    public static function getPages() : array
     {
         return [
-            'index'  => Pages\ListAdvertisements::route('/'),
+            'index' => Pages\ListAdvertisements::route('/'),
             'create' => Pages\CreateAdvertisement::route('/create'),
-            'edit'   => Pages\EditAdvertisement::route('/{record}/edit'),
+            'edit' => Pages\EditAdvertisement::route('/{record}/edit'),
         ];
     }
 }

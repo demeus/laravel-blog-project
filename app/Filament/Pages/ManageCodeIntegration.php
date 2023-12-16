@@ -2,30 +2,29 @@
 
 namespace App\Filament\Pages;
 
-use App\Settings\CodeIntegration;
-use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
+use App\Settings\CodeIntegration;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 
 class ManageCodeIntegration extends SettingsPage
 {
-    protected static string|null $navigationGroup = 'Settings';
+    protected static ?string $navigationGroup = 'Settings';
 
-    protected static string|null $navigationIcon = 'analytics';
+    protected static ?string $navigationIcon = 'analytics';
 
-    protected static string|null $title = 'Code Integration';
+    protected static ?string $title = 'Code Integration';
 
-    protected static string|null $navigationLabel = 'Code Integration';
+    protected static ?string $navigationLabel = 'Code Integration';
 
     protected static string $settings = CodeIntegration::class;
 
-    protected static int|null $navigationSort = 12;
+    protected static ?int $navigationSort = 12;
 
-
-    public function form(Form $form): Form
+    public function form(Form $form) : Form
     {
         return $form
             ->schema([
@@ -35,8 +34,7 @@ class ManageCodeIntegration extends SettingsPage
                             ->schema([
                                 TextInput::make('name')->required(),
                                 Textarea::make('code')->required(),
-                            ])
-                        ,
+                            ]),
                     ]),
             ]);
     }

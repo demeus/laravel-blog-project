@@ -2,33 +2,33 @@
 
 namespace App\Filament\Pages;
 
-use App\Settings\FooterSettings;
-use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Tabs;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Form;
 use Filament\Forms\Get;
+use Filament\Forms\Form;
+use App\Settings\FooterSettings;
 use Filament\Pages\SettingsPage;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\TextInput;
 
 class ManageFooter extends SettingsPage
 {
-    protected static string|null $navigationGroup = 'Settings';
+    protected static ?string $navigationGroup = 'Settings';
 
-    protected static string|null $navigationIcon = 'document-footer';
+    protected static ?string $navigationIcon = 'document-footer';
 
     protected static string $settings = FooterSettings::class;
 
-    protected static string|null $title = 'Footer Settings';
+    protected static ?string $title = 'Footer Settings';
 
-    protected static string|null $navigationLabel = 'Footer';
+    protected static ?string $navigationLabel = 'Footer';
 
     //    protected static string|null $navigationParentItem = 'General';
 
-    protected static int|null $navigationSort = 11;
+    protected static ?int $navigationSort = 11;
 
-    public function form(Form $form): Form
+    public function form(Form $form) : Form
     {
 
         return $form
@@ -65,12 +65,12 @@ class ManageFooter extends SettingsPage
                                             ->suffixIcon('heroicon-m-globe-alt')
                                             ->suffixIconColor('primary')
                                             ->options([
-                                                'facebook'  => 'Facebook',
+                                                'facebook' => 'Facebook',
                                                 'instagram' => 'Instagram',
-                                                'twitter'   => 'Twitter',
-                                                'youtube'   => 'Youtube',
-                                                'linkedin'  => 'LinkedIn',
-                                                'github'    => 'GitHub',
+                                                'twitter' => 'Twitter',
+                                                'youtube' => 'Youtube',
+                                                'linkedin' => 'LinkedIn',
+                                                'github' => 'GitHub',
                                             ])
                                             ->columnSpan([
                                                 'md' => 2,
@@ -93,7 +93,7 @@ class ManageFooter extends SettingsPage
                                 Toggle::make('show_copyright')->live(),
                                 TextInput::make('copyright')
                                     ->label('Copyright notice')
-                                    ->hidden(fn(Get $get) => false === $get('show_copyright')),
+                                    ->hidden(fn (Get $get) => false === $get('show_copyright')),
                             ]),
                     ])
                     ->persistTabInQueryString(),
@@ -101,61 +101,61 @@ class ManageFooter extends SettingsPage
 
     }
 
-//    public function form(Form $form): Form
-//    {
-//        return $form
-//            ->schema([
-//                Section::make('Сopyright Settings')
-//                    ->schema([
-//                        Toggle::make('show_copyright')->live(),
-//                        TextInput::make('copyright')
-//                            ->label('Copyright notice')
-//                            ->hidden(fn(Get $get) => false === $get('show_copyright')),
-//                    ]),
-//
-//                Section::make('Links')
-//                    ->schema([
+    //    public function form(Form $form): Form
+    //    {
+    //        return $form
+    //            ->schema([
+    //                Section::make('Сopyright Settings')
+    //                    ->schema([
+    //                        Toggle::make('show_copyright')->live(),
+    //                        TextInput::make('copyright')
+    //                            ->label('Copyright notice')
+    //                            ->hidden(fn(Get $get) => false === $get('show_copyright')),
+    //                    ]),
+    //
+    //                Section::make('Links')
+    //                    ->schema([
 
-//                    ]),
-//
-//                Section::make('Social links')
-//                    ->schema([
-//                        Repeater::make('social_links')
-//                            ->schema([
-//                                TextInput::make('name')
-//                                    ->label('Name')
-//                                    ->columnSpan([
-//                                        'md' => 3,
-//                                    ])
-//                                    ->required(),
-//                                Select::make('icon')
-//                                    ->label('Select icon')
-//                                    ->placeholder('Select icon')
-//                                    ->suffixIcon('heroicon-m-globe-alt')
-//                                    ->suffixIconColor('primary')
-//                                    ->options([
-//                                        'facebook'  => 'Facebook',
-//                                        'instagram' => 'Instagram',
-//                                        'twitter'   => 'Twitter',
-//                                        'youtube'   => 'Youtube',
-//                                        'linkedin'  => 'LinkedIn',
-//                                        'github'    => 'GitHub',
-//                                    ])
-//                                    ->columnSpan([
-//                                        'md' => 2,
-//                                    ]),
-//
-//                                TextInput::make('url')
-//                                    ->label('Url')
-//                                    ->url()
-//                                    ->required()
-//                                    ->columnSpan([
-//                                        'md' => 5,
-//                                    ]),
-//
-//                            ]),
-//                    ]),
-//            ]);
-//
-//    }
+    //                    ]),
+    //
+    //                Section::make('Social links')
+    //                    ->schema([
+    //                        Repeater::make('social_links')
+    //                            ->schema([
+    //                                TextInput::make('name')
+    //                                    ->label('Name')
+    //                                    ->columnSpan([
+    //                                        'md' => 3,
+    //                                    ])
+    //                                    ->required(),
+    //                                Select::make('icon')
+    //                                    ->label('Select icon')
+    //                                    ->placeholder('Select icon')
+    //                                    ->suffixIcon('heroicon-m-globe-alt')
+    //                                    ->suffixIconColor('primary')
+    //                                    ->options([
+    //                                        'facebook'  => 'Facebook',
+    //                                        'instagram' => 'Instagram',
+    //                                        'twitter'   => 'Twitter',
+    //                                        'youtube'   => 'Youtube',
+    //                                        'linkedin'  => 'LinkedIn',
+    //                                        'github'    => 'GitHub',
+    //                                    ])
+    //                                    ->columnSpan([
+    //                                        'md' => 2,
+    //                                    ]),
+    //
+    //                                TextInput::make('url')
+    //                                    ->label('Url')
+    //                                    ->url()
+    //                                    ->required()
+    //                                    ->columnSpan([
+    //                                        'md' => 5,
+    //                                    ]),
+    //
+    //                            ]),
+    //                    ]),
+    //            ]);
+    //
+    //    }
 }

@@ -26,7 +26,7 @@ class LatestCommentsWidget extends BaseWidget
                 TextColumn::make('post.title')
                     ->sortable()
                     ->searchable()
-                    ->description(fn(Comment $comment) => $comment->comment),
+                    ->description(fn (Comment $comment) => $comment->comment),
 
                 TextColumn::make('created_at')->date()->sortable(),
             ])

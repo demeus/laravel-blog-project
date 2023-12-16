@@ -6,7 +6,6 @@ use Spatie\LaravelSettings\Settings;
 
 class FooterSettings extends Settings
 {
-
     public array $links;
 
     public array $social_links;
@@ -15,7 +14,7 @@ class FooterSettings extends Settings
 
     public string $copyright;
 
-    public static function group(): string
+    public static function group() : string
     {
         return 'footer';
     }

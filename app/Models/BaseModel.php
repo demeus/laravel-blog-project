@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Settings\GeneralSettings;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Spatie\LaravelSettings\Settings;
 
 abstract class BaseModel extends Model
 {
@@ -21,11 +20,12 @@ abstract class BaseModel extends Model
         }
 
         $this->setDateFormatFromSettings();
+
         return $date->format($this->dateFormat);
 
     }
 
-    protected function setDateFormatFromSettings(): void
+    protected function setDateFormatFromSettings() : void
     {
         try {
             $settings = app(GeneralSettings::class);

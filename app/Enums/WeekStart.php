@@ -4,7 +4,7 @@ namespace App\Enums;
 
 use Filament\Support\Contracts\HasLabel;
 
-enum WeekStart: int implements HasLabel
+enum WeekStart : int implements HasLabel
 {
     case Monday = 1;
     case Tuesday = 2;
@@ -16,7 +16,7 @@ enum WeekStart: int implements HasLabel
 
     public const DEFAULT = self::Monday->value;
 
-    public function getLabel(): ?string
+    public function getLabel() : ?string
     {
         return today()->isoWeekday($this->value)->dayName;
     }

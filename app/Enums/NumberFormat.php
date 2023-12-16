@@ -2,10 +2,10 @@
 
 namespace App\Enums;
 
-use Filament\Support\Contracts\HasLabel;
 use NumberFormatter;
+use Filament\Support\Contracts\HasLabel;
 
-enum NumberFormat: string implements HasLabel
+enum NumberFormat : string implements HasLabel
 {
     case CommaDot = 'comma_dot';
     case DotComma = 'dot_comma';
@@ -16,7 +16,7 @@ enum NumberFormat: string implements HasLabel
 
     public const DEFAULT = self::CommaDot->value;
 
-    public function getLabel(): ?string
+    public function getLabel() : ?string
     {
         return match ($this) {
             self::CommaDot => '#,###,###.##',
@@ -28,7 +28,7 @@ enum NumberFormat: string implements HasLabel
         };
     }
 
-    public function getDecimalMark(): string
+    public function getDecimalMark() : string
     {
         return match ($this) {
             self::CommaDot, self::SpaceDot, self::IndianGrouping, self::ApostropheDot => '.',
@@ -36,7 +36,7 @@ enum NumberFormat: string implements HasLabel
         };
     }
 
-    public function getThousandsSeparator(): string
+    public function getThousandsSeparator() : string
     {
         return match ($this) {
             self::CommaDot, self::IndianGrouping => ',',
@@ -46,7 +46,7 @@ enum NumberFormat: string implements HasLabel
         };
     }
 
-    public function getFormattedExample(): string
+    public function getFormattedExample() : string
     {
         $exampleNumber = 1234567.89;
         $formatter = new NumberFormatter($this->getAssociatedLocale(), NumberFormatter::DECIMAL);
@@ -54,7 +54,7 @@ enum NumberFormat: string implements HasLabel
         return $formatter->format($exampleNumber);
     }
 
-    public function getAssociatedLocale(): string
+    public function getAssociatedLocale() : string
     {
         return match ($this) {
             self::CommaDot => 'en_US',
@@ -66,7 +66,7 @@ enum NumberFormat: string implements HasLabel
         };
     }
 
-    public static function fromLanguageAndCountry(string $language, string $countryCode): string
+    public static function fromLanguageAndCountry(string $language, string $countryCode) : string
     {
         $testNumber = 1234567.8912;
         $fullLocale = "{$language}_{$countryCode}";
@@ -77,11 +77,11 @@ enum NumberFormat: string implements HasLabel
         return self::fromFormattedNumber($formattedNumber);
     }
 
-    public static function fromFormattedNumber(string $formattedNumber): string
+    public static function fromFormattedNumber(string $formattedNumber) : string
     {
         $commaDot = strpos($formattedNumber, '.') && strpos($formattedNumber, ',');
         $dotComma = strpos($formattedNumber, ',') && strpos($formattedNumber, '.');
-        $indianGrouping = strpos($formattedNumber, ',') && ! strpos($formattedNumber, '.');
+        $indianGrouping = strpos($formattedNumber, ',') && !strpos($formattedNumber, '.');
         $apostropheDot = strpos($formattedNumber, '\'') && strpos($formattedNumber, '.');
         $spaceComma = strpos($formattedNumber, ' ') && strpos($formattedNumber, ',');
         $spaceDot = strpos($formattedNumber, ' ') && strpos($formattedNumber, '.');
@@ -97,7 +97,7 @@ enum NumberFormat: string implements HasLabel
         };
     }
 
-    public function getFormattingParameters(): array
+    public function getFormattingParameters() : array
     {
         return [$this->getDecimalMark(), $this->getThousandsSeparator()];
     }

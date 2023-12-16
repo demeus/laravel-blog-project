@@ -2,18 +2,17 @@
 
 namespace App\Enums;
 
+use Illuminate\Support\Collection;
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
-use Illuminate\Support\Collection;
 
-enum RoleEnum: string implements HasColor, HasLabel
+enum RoleEnum : string implements HasColor, HasLabel
 {
     case ADMIN = 'ADMIN';
     case EDITOR = 'EDITOR';
     case USER = 'USER';
 
-
-    public function getLabel(): string
+    public function getLabel() : string
     {
         return match ($this) {
             self::ADMIN => 'Admin',
@@ -22,7 +21,7 @@ enum RoleEnum: string implements HasColor, HasLabel
         };
     }
 
-    public function getColor(): string|array|null
+    public function getColor() : string|array|null
     {
         return match ($this) {
             self::ADMIN => 'danger',
@@ -31,10 +30,8 @@ enum RoleEnum: string implements HasColor, HasLabel
         };
     }
 
-
-    public static function all(): Collection
+    public static function all() : Collection
     {
         return collect(self::cases());
     }
-
 }

@@ -2,27 +2,27 @@
 
 namespace App\Filament\Resources;
 
-use App\Enums\CommentStatus;
-use App\Filament\Resources\CommentResource\Pages;
-use App\Models\Comment;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Columns\TextColumn;
+use App\Models\Comment;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Enums\CommentStatus;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use App\Filament\Resources\CommentResource\Pages;
 
 class CommentResource extends Resource
 {
-    protected static string|null $navigationGroup = 'Blog';
+    protected static ?string $navigationGroup = 'Blog';
 
-    protected static string|null $model = Comment::class;
+    protected static ?string $model = Comment::class;
 
-    protected static string|null $navigationIcon = 'heroicon-o-chat-bubble-bottom-center';
+    protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-bottom-center';
 
-    public static function form(Form $form): Form
+    public static function form(Form $form) : Form
     {
         return $form->schema([
             Section::make()
@@ -51,7 +51,7 @@ class CommentResource extends Resource
 
     }
 
-    public static function table(Table $table): Table
+    public static function table(Table $table) : Table
     {
         return $table
             ->columns([
@@ -62,7 +62,7 @@ class CommentResource extends Resource
                 TextColumn::make('post.title')
                     ->sortable()
                     ->searchable()
-                    ->description(fn(Comment $comment) => $comment->comment),
+                    ->description(fn (Comment $comment) => $comment->comment),
 
                 TextColumn::make('created_at')
                     ->label('Created')
@@ -91,19 +91,19 @@ class CommentResource extends Resource
             ->deferLoading();
     }
 
-    public static function getRelations(): array
+    public static function getRelations() : array
     {
         return [
             //
         ];
     }
 
-    public static function getPages(): array
+    public static function getPages() : array
     {
         return [
             'index' => Pages\ListComments::route('/'),
-//            'create' => Pages\CreateComment::route('/create'),
-            'edit'  => Pages\EditComment::route('/{record}/edit'),
+            //            'create' => Pages\CreateComment::route('/create'),
+            'edit' => Pages\EditComment::route('/{record}/edit'),
         ];
     }
 }

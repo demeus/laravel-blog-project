@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use App\Enums\VisibilityStatusEnum;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Advertisement extends Model
 {
@@ -25,11 +25,11 @@ class Advertisement extends Model
 
     protected $casts = [
         'start_date' => 'datetime',
-        'end_date'   => 'datetime',
-        'status'     => VisibilityStatusEnum::class,
+        'end_date' => 'datetime',
+        'status' => VisibilityStatusEnum::class,
     ];
 
-    public function user(): BelongsTo
+    public function user() : BelongsTo
     {
         return $this->belongsTo(User::class);
     }

@@ -10,7 +10,7 @@ trait HasMediaAttached
 {
     use InteractsWithMedia;
 
-    public function registerMediaCollections(): void
+    public function registerMediaCollections() : void
     {
         $this
             ->addMediaCollection('image')
@@ -19,7 +19,7 @@ trait HasMediaAttached
         $this->addMediaCollection('images');
     }
 
-    public function registerMediaConversions(Media|null $media = null): void
+    public function registerMediaConversions(?Media $media = null) : void
     {
         $this
             ->addMediaConversion('optimized')

@@ -2,37 +2,33 @@
 
 namespace App\Filament\Pages;
 
-use App\Settings\GeneralSettings;
 use DateTimeZone;
-use Filament\Forms;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TagsInput;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
-use Illuminate\Support\Facades\Blade;
+use App\Settings\GeneralSettings;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\TextInput;
 
 class ManageGeneralSettings extends SettingsPage
 {
-    protected static string|null $navigationGroup = 'Settings';
+    protected static ?string $navigationGroup = 'Settings';
 
-    protected static string|null $navigationIcon = 'heroicon-o-cog-6-tooth';
+    protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
 
     protected static string $settings = GeneralSettings::class;
 
-    protected static string|null $title = 'General Settings';
+    protected static ?string $title = 'General Settings';
 
-    protected static string|null $navigationLabel = 'General';
+    protected static ?string $navigationLabel = 'General';
 
-//    protected static string|null $navigationParentItem = 'Settings';
+    //    protected static string|null $navigationParentItem = 'Settings';
 
+    protected static ?int $navigationSort = 10;
 
-    protected static int|null $navigationSort = 10;
-
-
-    public function form(Form $form): Form
+    public function form(Form $form) : Form
     {
         return $form
             ->schema([
@@ -73,8 +69,7 @@ class ManageGeneralSettings extends SettingsPage
             ]);
     }
 
-
-    private function getDatetimeFormatOptions(): array
+    private function getDatetimeFormatOptions() : array
     {
         $color = 'rounded-md bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700 ring-1 ';
 
@@ -82,14 +77,15 @@ class ManageGeneralSettings extends SettingsPage
             'Y-m-d H:i:s',
             'm/d/Y h:i A',
             'd/m/Y H:i',
-            'j M Y G:i'
+            'j M Y G:i',
         ];
 
         $options = [];
 
         foreach ($formats as $format) {
             $dateTime = date($format);
-            $badge = sprintf('<span class="%s">%s</span>',
+            $badge = sprintf(
+                '<span class="%s">%s</span>',
                 $color,
                 e($dateTime)
             );

@@ -4,7 +4,7 @@ namespace App\Enums;
 
 use Filament\Support\Contracts\HasLabel;
 
-enum DateFormat: string implements HasLabel
+enum DateFormat : string implements HasLabel
 {
     // Day-Month-Year Formats
     case DMY_SLASH = 'd/m/Y'; // 31/12/2021
@@ -34,7 +34,7 @@ enum DateFormat: string implements HasLabel
 
     public const DEFAULT = self::MDY_SHORT_COMMA->value;
 
-    public function getLabel(): ?string
+    public function getLabel() : ?string
     {
         return now()->translatedFormat($this->value);
     }

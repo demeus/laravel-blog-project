@@ -2,10 +2,10 @@
 
 namespace App\Enums;
 
-use Filament\Support\Contracts\HasLabel;
 use Illuminate\Support\Carbon;
+use Filament\Support\Contracts\HasLabel;
 
-enum TimeFormat: string implements HasLabel
+enum TimeFormat : string implements HasLabel
 {
     // 12-Hour Formats
     case G12_CAP = 'g:i A'; // 5:30 AM
@@ -19,7 +19,7 @@ enum TimeFormat: string implements HasLabel
 
     public const DEFAULT = self::G12_CAP->value;
 
-    public function getLabel(): ?string
+    public function getLabel() : ?string
     {
         return Carbon::createFromTime(5, 30)->translatedFormat($this->value);
     }

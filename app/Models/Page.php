@@ -2,21 +2,20 @@
 
 namespace App\Models;
 
+use Spatie\MediaLibrary\HasMedia;
 use App\Models\Concerns\HasLocalScopes;
 use App\Models\Concerns\HasMediaAttached;
 use App\Models\Concerns\HasRelationships;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Spatie\MediaLibrary\HasMedia;
 
 class Page extends BaseModel implements HasMedia
 {
     use HasFactory;
-    use Sluggable;
-    use HasMediaAttached;
     use HasLocalScopes;
+    use HasMediaAttached;
     use HasRelationships;
-
+    use Sluggable;
 
     protected $fillable = [
         'user_id',
@@ -27,7 +26,7 @@ class Page extends BaseModel implements HasMedia
         'description',
     ];
 
-    public function sluggable(): array
+    public function sluggable() : array
     {
         return [
             'slug' => [
@@ -39,6 +38,4 @@ class Page extends BaseModel implements HasMedia
     protected $casts = [
         'tags' => 'array',
     ];
-
-
 }

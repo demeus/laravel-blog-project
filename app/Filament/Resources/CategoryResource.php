@@ -12,7 +12,6 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Columns\ColorColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -37,7 +36,7 @@ class CategoryResource extends Resource
                             ->live()
                             ->required()->minLength(1)->maxLength(150)
                             ->afterStateUpdated(function (string $operation, $state, Forms\Set $set) {
-                                if ($operation === 'edit') {
+                                if ('edit' === $operation) {
                                     return;
                                 }
 
@@ -51,8 +50,6 @@ class CategoryResource extends Resource
                         ColorPicker::make('text_color')
                             ->nullable(),
 
-                        \App\Forms\Components\ColorPicker::make('text_color')
-                        ,
 
                         Toggle::make('status')
                             ->label(__('categories.fields.is_visible'))
@@ -61,7 +58,11 @@ class CategoryResource extends Resource
                             ->afterStateHydrated(function (Toggle $component, string $state) {
                                 $component->state($state == VisibilityStatusEnum::ACTIVE->value);
                             })
-                            ->dehydrateStateUsing(fn(string $state): string => $state ? VisibilityStatusEnum::ACTIVE->value : VisibilityStatusEnum::DISABLED->value),
+                            ->dehydrateStateUsing(
+                                fn(
+                                    string $state
+                                ): string => $state ? VisibilityStatusEnum::ACTIVE->value : VisibilityStatusEnum::DISABLED->value
+                            ),
                     ]),
             ]);
     }
@@ -80,9 +81,6 @@ class CategoryResource extends Resource
                     ->counts('posts')
                     ->sortable(),
 
-                ColorColumn::make('text_color')
-                    ->sortable()
-                    ->searchable(),
 
             ])
             ->filters([
@@ -116,9 +114,9 @@ class CategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCategories::route('/'),
+            'index'  => Pages\ListCategories::route('/'),
             'create' => Pages\CreateCategory::route('/create'),
-            'edit' => Pages\EditCategory::route('/{record}/edit'),
+            'edit'   => Pages\EditCategory::route('/{record}/edit'),
         ];
     }
 

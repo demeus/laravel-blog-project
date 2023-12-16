@@ -20,21 +20,17 @@ class GeneralSettings extends Settings
 
     public bool $site_active;
 
-
-
     #[\Override]
-    public static function group(): string
+    public static function group() : string
     {
         return 'general';
     }
 
-
-//    public static function casts(): array
-//    {
-//        return [
-//            'site_keywords' => 'array',
-//        ];
-//    }
-
+    //    public static function casts(): array
+    //    {
+    //        return [
+    //            'site_keywords' => 'array',
+    //        ];
+    //    }
 
 }

@@ -2,18 +2,18 @@
 
 namespace App\Models;
 
+use Spatie\Feed\Feedable;
+use Illuminate\Support\Str;
+use Spatie\MediaLibrary\HasMedia;
 use App\Models\Concerns\HasFeedItems;
+use App\Models\Concerns\LogsActivity;
 use App\Models\Concerns\HasLocalScopes;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Concerns\HasMediaAttached;
 use App\Models\Concerns\HasRelationships;
-use App\Models\Concerns\LogsActivity;
 use Cviebrock\EloquentSluggable\Sluggable;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Spatie\Feed\Feedable;
-use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Post extends BaseModel implements Feedable, HasMedia
 {
@@ -38,7 +38,7 @@ class Post extends BaseModel implements Feedable, HasMedia
         'commercial',
     ];
 
-    public function sluggable(): array
+    public function sluggable() : array
     {
         return [
             'slug' => [
@@ -53,31 +53,30 @@ class Post extends BaseModel implements Feedable, HasMedia
         'tags' => 'array',
     ];
 
-
-    public function scopeWithCategory($query, string $category): void
+    public function scopeWithCategory($query, string $category) : void
     {
         $query->whereHas('category', function ($query) use ($category) {
             $query->where('slug', $category);
         });
     }
 
-
     public function getFormattedDate()
     {
         return $this->published_at->format('F jS Y');
     }
 
-    public function getReadingTime(): float|int
+    public function getReadingTime() : float|int
     {
         $mins = round(str_word_count($this->body) / 250);
 
         if ($mins < 1) {
             return 1;
         }
+
         return $mins;
     }
 
-    public function humanReadTime(): Attribute
+    public function humanReadTime() : Attribute
     {
         return new Attribute(
             get: function () {
@@ -101,17 +100,17 @@ class Post extends BaseModel implements Feedable, HasMedia
         return Storage::disk('public')->url($this->image);
     }
 
-    public function getNextPost(): self|null
+    public function getNextPost() : ?self
     {
         return $this->getPublishedPost('desc');
     }
 
-    public function getPrevPost(): self|null
+    public function getPrevPost() : ?self
     {
         return $this->getPublishedPost('asc');
     }
 
-    private function getPublishedPost(string $order): self|null
+    private function getPublishedPost(string $order) : ?self
     {
         return self::query()
             ->published()
