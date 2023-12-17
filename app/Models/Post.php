@@ -2,18 +2,19 @@
 
 namespace App\Models;
 
-use Spatie\Feed\Feedable;
-use Illuminate\Support\Str;
-use Spatie\MediaLibrary\HasMedia;
 use App\Models\Concerns\HasFeedItems;
-use App\Models\Concerns\LogsActivity;
 use App\Models\Concerns\HasLocalScopes;
-use Illuminate\Support\Facades\Storage;
 use App\Models\Concerns\HasMediaAttached;
 use App\Models\Concerns\HasRelationships;
+use App\Models\Concerns\LogsActivity;
 use Cviebrock\EloquentSluggable\Sluggable;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Spatie\Feed\Feedable;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\Tags\HasTags;
 
 class Post extends BaseModel implements Feedable, HasMedia
 {
@@ -24,6 +25,7 @@ class Post extends BaseModel implements Feedable, HasMedia
     use LogsActivity;
     use Sluggable;
     use SoftDeletes;
+    use HasTags;
 
     protected $fillable = [
         'user_id',
@@ -32,13 +34,13 @@ class Post extends BaseModel implements Feedable, HasMedia
         'slug',
         'image',
         'body',
-        'tags',
+//        'tags',
         'teaser',
         'published_at',
         'commercial',
     ];
 
-    public function sluggable() : array
+    public function sluggable(): array
     {
         return [
             'slug' => [
@@ -49,11 +51,11 @@ class Post extends BaseModel implements Feedable, HasMedia
 
     protected $casts = [
         'published_at' => 'datetime',
-        'commercial' => 'boolean',
-        'tags' => 'array',
+        'commercial'   => 'boolean',
+//        'tags' => 'array',
     ];
 
-    public function scopeWithCategory($query, string $category) : void
+    public function scopeWithCategory($query, string $category): void
     {
         $query->whereHas('category', function ($query) use ($category) {
             $query->where('slug', $category);
@@ -65,7 +67,7 @@ class Post extends BaseModel implements Feedable, HasMedia
         return $this->published_at->format('F jS Y');
     }
 
-    public function getReadingTime() : float|int
+    public function getReadingTime(): float|int
     {
         $mins = round(str_word_count($this->body) / 250);
 
@@ -76,15 +78,15 @@ class Post extends BaseModel implements Feedable, HasMedia
         return $mins;
     }
 
-    public function humanReadTime() : Attribute
+    public function humanReadTime(): Attribute
     {
         return new Attribute(
             get: function () {
-                $words = Str::wordCount(strip_tags($this->body));
+                $words   = Str::wordCount(strip_tags($this->body));
                 $minutes = ceil($words / 200);
 
-                return $minutes . ' ' . str('min')->plural($minutes) . ', '
-                    . $words . ' ' . str('word')->plural($words);
+                return $minutes.' '.str('min')->plural($minutes).', '
+                    .$words.' '.str('word')->plural($words);
             }
         );
     }
@@ -100,17 +102,17 @@ class Post extends BaseModel implements Feedable, HasMedia
         return Storage::disk('public')->url($this->image);
     }
 
-    public function getNextPost() : ?self
+    public function getNextPost(): ?self
     {
         return $this->getPublishedPost('desc');
     }
 
-    public function getPrevPost() : ?self
+    public function getPrevPost(): ?self
     {
         return $this->getPublishedPost('asc');
     }
 
-    private function getPublishedPost(string $order) : ?self
+    private function getPublishedPost(string $order): ?self
     {
         return self::query()
             ->published()

@@ -2,31 +2,32 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Forms;
+use App\Filament\Resources\PostResource\Pages;
+use App\Filament\Resources\PostResource\RelationManagers\CommentsRelationManager;
 use App\Models\Post;
-use Filament\Tables;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
-use Illuminate\Support\Str;
-use Filament\Resources\Resource;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\Textarea;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TagsInput;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\RichEditor;
-use Filament\Tables\Columns\ToggleColumn;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\Placeholder;
-use Filament\Tables\Columns\CheckboxColumn;
+use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\MarkdownEditor;
-use App\Filament\Resources\PostResource\Pages;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
-use App\Filament\Resources\PostResource\RelationManagers\CommentsRelationManager;
+use Filament\Forms\Components\SpatieTagsInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Columns\CheckboxColumn;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
+use Filament\Tables\Columns\SpatieTagsColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class PostResource extends Resource
 {
@@ -38,7 +39,7 @@ class PostResource extends Resource
 
     protected static string|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function form(Form $form) : Form
+    public static function form(Form $form): Form
     {
         return $form
             ->schema(static::getFormComponents())
@@ -48,7 +49,7 @@ class PostResource extends Resource
             ]);
     }
 
-    public static function getFormComponents() : array
+    public static function getFormComponents(): array
     {
         return [
             Forms\Components\Section::make('Content')
@@ -89,7 +90,7 @@ class PostResource extends Resource
                         ]),
 
 
-                    TagsInput::make('tags'),
+                    SpatieTagsInput::make('tags'),
 
                     RichEditor::make('body')
                         ->required()
@@ -147,13 +148,13 @@ class PostResource extends Resource
                         ->schema([
                             Placeholder::make('created_at')
                                 ->label('Created at')
-                                ->content(fn (Post $post) : ?string => $post->created_at?->isoFormat('LLL')),
+                                ->content(fn(Post $post): ?string => $post->created_at?->isoFormat('LLL')),
 
                             Placeholder::make('updated_at')
                                 ->label('Last modified at')
-                                ->content(fn (Post $post) : ?string => $post->updated_at?->isoFormat('LLL')),
+                                ->content(fn(Post $post): ?string => $post->updated_at?->isoFormat('LLL')),
                         ])
-                        ->hidden(fn (Post $post) => !$post->exists),  //
+                        ->hidden(fn(Post $post) => !$post->exists),  //
 
                 ])
                 ->collapsible()
@@ -163,7 +164,7 @@ class PostResource extends Resource
         ];
     }
 
-    public static function table(Table $table) : Table
+    public static function table(Table $table): Table
     {
         return $table
             ->columns(static::getTableColumns())
@@ -171,7 +172,7 @@ class PostResource extends Resource
                 Tables\Filters\SelectFilter::make('category')
                     ->relationship('category', 'title'),
                 Tables\Filters\Filter::make('Commercial')
-                    ->query(fn (Builder $query) : Builder => $query->where('commercial', true))
+                    ->query(fn(Builder $query): Builder => $query->where('commercial', true))
                     ->toggle(),
                 Tables\Filters\TrashedFilter::make(),
             ])
@@ -191,7 +192,7 @@ class PostResource extends Resource
             ->defaultSort('id', 'desc');
     }
 
-    public static function getTableColumns() : array
+    public static function getTableColumns(): array
     {
         return [
 
@@ -213,7 +214,9 @@ class PostResource extends Resource
             TextColumn::make('title')
                 ->sortable()
                 ->searchable()
-                ->description(fn (Post $post) => $post->slug),
+                ->description(fn(Post $post) => $post->slug),
+
+            SpatieTagsColumn::make('tags'),
 
             TextColumn::make('category.title')
                 ->sortable()
@@ -235,14 +238,14 @@ class PostResource extends Resource
         ];
     }
 
-    public static function getRelations() : array
+    public static function getRelations(): array
     {
         return [
             CommentsRelationManager::class,
         ];
     }
 
-    public static function getPages() : array
+    public static function getPages(): array
     {
         return [
             'index'  => Pages\ListPosts::route('/'),
@@ -251,7 +254,7 @@ class PostResource extends Resource
         ];
     }
 
-    public static function getEloquentQuery() : Builder
+    public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
             ->withoutGlobalScopes([

@@ -1,15 +1,15 @@
 <?php
 
 use App\Enums\VisibilityStatusEnum;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
     /**
      * Run the migrations.
      */
-    public function up() : void
+    public function up(): void
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->string('icon')->nullable();
             $table->string('text_color')->nullable();
             $table->string('status')->default(VisibilityStatusEnum::ACTIVE->value);
-            $table->boolean('show_in_navigation')->default(0);
+            $table->boolean('show_in_navigation')->default(1);
             $table->softDeletes();
             $table->timestamps();
         });
@@ -27,7 +27,7 @@ return new class extends Migration {
     /**
      * Reverse the migrations.
      */
-    public function down() : void
+    public function down(): void
     {
         Schema::dropIfExists('categories');
     }

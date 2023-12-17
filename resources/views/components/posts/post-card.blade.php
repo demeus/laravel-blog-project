@@ -17,9 +17,8 @@
         @if(is_countable($post->tags) && count($post->tags))
             <div class="card-actions justify-end">
                 @foreach($post->tags as $tag)
-                    <x-posts.tag-badge :tag="$tag"/>
+                    <x-posts.tag-badge :tag="$tag->name"/>
                 @endforeach
-
             </div>
         @endif
 

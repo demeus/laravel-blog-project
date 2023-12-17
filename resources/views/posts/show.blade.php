@@ -38,7 +38,7 @@
 
                 <div class="flex items-center mt-10 space-x-4">
                     @foreach ($post->tags ?? [] as $tag)
-                        <x-posts.tag-badge :tag="$tag"/>
+                        <x-posts.tag-badge :tag="$tag->name"/>
                     @endforeach
 
                 </div>
@@ -49,9 +49,10 @@
         </div>
         <div id="side-bar"
              class="sticky top-0 h-screen col-span-4 px-3 py-6 pt-10 space-y-10 border-t border-gray-100 border-t-gray-100 md:border-t-none md:col-span-1 md:px-6 md:border-l">
-            @include('posts.partials.search-box')
-
-            {{--            @include('posts.partials.categories-box')--}}
+            @include('posts.partials.categories-box')
+            @foreach($recommendations as $recommendation )
+                <x-posts.post-recommendation :post="$recommendation"/>
+            @endforeach
         </div>
     </div>
 </x-app-layout>

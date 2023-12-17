@@ -3,14 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Facades\Posts;
-use App\Models\Category;
 use App\Models\Post;
 use App\Service\PostViewService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 class PostController extends Controller
 {
@@ -28,13 +26,7 @@ class PostController extends Controller
      */
     public function index(): View|\Illuminate\Foundation\Application|Factory|Application
     {
-        $categories = Cache::remember('categories', now()->addDays(3), function () {
-            return Category::query()->whereHas('posts', function ($query) {
-                $query->published();
-            })->take(10)->get();
-        });
-
-        return view('posts.index', compact('categories'));
+        return view('posts.index');
     }
 
     /**
@@ -47,8 +39,7 @@ class PostController extends Controller
     public function show(Post $post, Request $request): Factory|\Illuminate\Foundation\Application|View|Application
     {
         $this->postViewService->handleView($request, $post);
-
-        dd(Posts::recommendations($post));
-        return view('posts.show', compact('post'));
+        $recommendations = Posts::recommendations($post);
+        return view('posts.show', compact('post', 'recommendations'));
     }
 }

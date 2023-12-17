@@ -23,10 +23,9 @@
             </p>
             <div class="flex items-center justify-between mt-6 article-actions-bar">
                 <div class="flex gap-x-2">
-                    <x-posts.category-badge :category="$post->category"/>
+                    {{--                    <x-posts.category-badge :category="$post->category"/>--}}
 
                     <div class="flex items-center space-x-4">
-
                         <span class="text-sm text-gray-500">
                             Published on
                             {{$post->getFormattedDate()}} | {{ $post->human_read_time }}
@@ -34,6 +33,13 @@
                         </span>
                     </div>
                 </div>
+                @if(is_countable($post->tags) && count($post->tags))
+                    <div class="card-actions justify-end">
+                        @foreach($post->tags as $tag)
+                            <x-posts.tag-badge :tag="$tag->name"/>
+                        @endforeach
+                    </div>
+                @endif
                 <div>
                     <livewire:like-button :key="'like-' . $post->id" :$post/>
                 </div>

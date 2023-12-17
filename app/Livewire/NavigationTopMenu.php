@@ -2,10 +2,10 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\Category;
-use Livewire\Attributes\Computed;
 use Illuminate\Support\Facades\Cache;
+use Livewire\Attributes\Computed;
+use Livewire\Component;
 
 class NavigationTopMenu extends Component
 {

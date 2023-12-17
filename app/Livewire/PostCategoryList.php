@@ -2,13 +2,13 @@
 
 namespace App\Livewire;
 
-use App\Models\Post;
-use Livewire\Component;
 use App\Models\Category;
+use App\Models\Post;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
+use Livewire\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\Computed;
 
 class PostCategoryList extends Component
 {
@@ -26,19 +26,19 @@ class PostCategoryList extends Component
     public bool $popular = false;
 
 
-    public function setSort($sort) : void
+    public function setSort($sort): void
     {
         $this->sort = ('desc' === $sort) ? 'desc' : 'asc';
     }
 
     #[On('search')]
-    public function updateSearch($search) : void
+    public function updateSearch($search): void
     {
         $this->search = $search;
         $this->resetPage();
     }
 
-    public function clearFilters() : void
+    public function clearFilters(): void
     {
         $this->search = '';
         $this->resetPage();
@@ -56,7 +56,7 @@ class PostCategoryList extends Component
             })
             ->search($this->search)
             ->orderBy('published_at', $this->sort)
-            ->paginate(3);
+            ->paginate(10);
     }
 
 

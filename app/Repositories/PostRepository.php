@@ -43,9 +43,7 @@ class PostRepository implements PostRepositoryContract
     public function recommendations(Post $post): Collection
     {
         return Post::query()->with('category', 'media')
-            ->whereHas('tags', function ($query) use ($post) {
-                $query->whereIn('tag', $post->tags);
-            })
+            ->withAnyTags($post->tags)
             ->published()
             ->whereNotIn('id', [$post->id])
             ->when(
