@@ -34,4 +34,13 @@ enum CommentStatus : string implements HasColor, HasLabel
     {
         return collect(self::cases());
     }
+
+    public function getIcon() : string
+    {
+        return match ($this) {
+            self::Pending => 'heroicon-o-clock',
+            self::Approved => 'heroicon-o-check-circle',
+            self::Rejected => 'heroicon-o-x-circle',
+        };
+    }
 }

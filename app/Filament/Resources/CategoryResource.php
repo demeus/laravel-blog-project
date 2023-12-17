@@ -2,21 +2,22 @@
 
 namespace App\Filament\Resources;
 
-use App\Enums\VisibilityStatusEnum;
-use App\Filament\Resources\CategoryResource\Pages;
-use App\Models\Category;
 use Filament\Forms;
-use Filament\Forms\Components\ColorPicker;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Columns\TextColumn;
+use App\Models\Category;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
+use Filament\Resources\Resource;
+use App\Enums\VisibilityStatusEnum;
+use Filament\Forms\Components\Toggle;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ToggleColumn;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\ColorPicker;
+use App\Filament\Resources\CategoryResource\Pages;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CategoryResource extends Resource
 {
@@ -26,7 +27,7 @@ class CategoryResource extends Resource
 
     protected static string|null $navigationIcon = 'heroicon-o-tag';
 
-    public static function form(Form $form): Form
+    public static function form(Form $form) : Form
     {
         return $form
             ->schema([
@@ -54,20 +55,22 @@ class CategoryResource extends Resource
                         Toggle::make('status')
                             ->label(__('categories.fields.is_visible'))
                             ->default(VisibilityStatusEnum::ACTIVE->value)
-                            ->helperText(__('categories.fields.is_visible_help_text'))
                             ->afterStateHydrated(function (Toggle $component, string $state) {
                                 $component->state($state == VisibilityStatusEnum::ACTIVE->value);
                             })
                             ->dehydrateStateUsing(
-                                fn(
+                                fn (
                                     string $state
-                                ): string => $state ? VisibilityStatusEnum::ACTIVE->value : VisibilityStatusEnum::DISABLED->value
+                                ) : string => $state ? VisibilityStatusEnum::ACTIVE->value : VisibilityStatusEnum::DISABLED->value
                             ),
+
+                        Toggle::make('show_in_navigation')
+                            ->label('Show in navigation')
                     ]),
             ]);
     }
 
-    public static function table(Table $table): Table
+    public static function table(Table $table) : Table
     {
         return $table
             ->columns([
@@ -81,7 +84,11 @@ class CategoryResource extends Resource
                     ->counts('posts')
                     ->sortable(),
 
+                ToggleColumn::make('show_in_navigation')
+                    ->label('Show in navigation'),
 
+                ToggleColumn::make('status')
+                    ->label(__('categories.fields.is_visible')),
             ])
             ->filters([
                 //
@@ -104,23 +111,23 @@ class CategoryResource extends Resource
             ->deferLoading();
     }
 
-    public static function getRelations(): array
+    public static function getRelations() : array
     {
         return [
             //
         ];
     }
 
-    public static function getPages(): array
+    public static function getPages() : array
     {
         return [
-            'index'  => Pages\ListCategories::route('/'),
-            'create' => Pages\CreateCategory::route('/create'),
-            'edit'   => Pages\EditCategory::route('/{record}/edit'),
+            'index' => Pages\ListCategories::route('/'),
+//            'create' => Pages\CreateCategory::route('/create'),
+//            'edit'   => Pages\EditCategory::route('/{record}/edit'),
         ];
     }
 
-    public static function getEloquentQuery(): Builder
+    public static function getEloquentQuery() : Builder
     {
         return parent::getEloquentQuery()
             ->withoutGlobalScopes([

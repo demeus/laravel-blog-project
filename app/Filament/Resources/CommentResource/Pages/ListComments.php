@@ -22,22 +22,13 @@ class ListComments extends ListRecords
 
     public function getTabs() : array
     {
-        //        return [
-        //            null => Tab::make('All'),
-        //            'new' => Tab::make()->query(fn ($query) => $query->where('status', 'new')),
-        //            'processing' => ListRecords\Tab::make()->query(fn ($query) => $query->where('status', 'processing')),
-        //            'shipped' => ListRecords\Tab::make()->query(fn ($query) => $query->where('status', 'shipped')),
-        //            'delivered' => ListRecords\Tab::make()->query(fn ($query) => $query->where('status', 'delivered')),
-        //            'cancelled' => ListRecords\Tab::make()->query(fn ($query) => $query->where('status', 'cancelled')),
-        //        ];
-        //    }
-
-        $tabs = [
+        $tabs     = [
             null => Tab::make('All'),
         ];
         $statuses = CommentStatus::all();
         foreach ($statuses as $status) {
             $tabs[$status->name] = Tab::make()
+                ->icon($status->getIcon())
                 ->query(fn (Builder $query) => $query->where('status', $status->value));
         }
 

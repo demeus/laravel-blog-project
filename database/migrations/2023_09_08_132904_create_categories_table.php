@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->string('icon')->nullable();
             $table->string('text_color')->nullable();
             $table->string('status')->default(VisibilityStatusEnum::ACTIVE->value);
+            $table->boolean('show_in_navigation')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

@@ -1,5 +1,5 @@
 @props(['title'])
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
@@ -11,7 +11,7 @@
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet"/>
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -21,20 +21,24 @@
 </head>
 
 <body class="font-sans antialiased">
-    <x-banner />
+<x-banner/>
 
-    @include('layouts.partials.header')
 
-    @yield('hero')
+<header class="">
+    <livewire:navigation-top-menu/>
+</header>
 
-    <main class="container flex flex-grow px-5 mx-auto">
-        {{ $slot }}
-    </main>
 
-    <x-site.footer />
+@yield('hero')
 
-    @stack('modals')
-    @livewireScripts
+<main class="container flex flex-grow px-5 mx-auto">
+    {{ $slot }}
+</main>
+
+<x-site.footer/>
+
+@stack('modals')
+@livewireScripts
 </body>
 
 </html>

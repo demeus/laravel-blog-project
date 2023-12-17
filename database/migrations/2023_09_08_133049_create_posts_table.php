@@ -14,8 +14,13 @@ return new class extends Migration {
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(Category::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(User::class)
+                ->constrained()
+                ->cascadeOnDelete();
+            $table->foreignIdFor(Category::class)
+                ->nullable()
+                ->constrained()
+                ->nullOnDelete();
             $table->string('image')->nullable();
             $table->string('title')->index();
             $table->string('slug')->unique();
@@ -26,7 +31,6 @@ return new class extends Migration {
             $table->boolean('commercial')->default(false);
             $table->softDeletes();
             $table->timestamps();
-
         });
     }
 

@@ -10,9 +10,9 @@ use Filament\Widgets\ChartWidget;
 
 class PostsPerMonthChart extends ChartWidget
 {
-    protected static ?string $heading = 'Blog posts';
+    protected static string|null $heading = 'Blog posts';
 
-    protected static ?int $contentHeight = 300;
+    protected static int|null $contentHeight = 300;
 
     protected function getData() : array
     {
@@ -29,10 +29,10 @@ class PostsPerMonthChart extends ChartWidget
             'datasets' => [
                 [
                     'label' => 'Blog posts',
-                    'data' => $data->map(fn (TrendValue $value) => $value->aggregate),
+                    'data'  => $data->map(fn (TrendValue $value) => $value->aggregate),
                 ],
             ],
-            'labels' => $data->map(fn (TrendValue $value) => Carbon::parse($value->date)->format('M')),
+            'labels'   => $data->map(fn (TrendValue $value) => Carbon::parse($value->date)->format('M')),
         ];
     }
 

@@ -51,7 +51,6 @@ trait HasLocalScopes
     public function getExcerpt($words = 30) : string
     {
         return Str::words(strip_tags($this->body), $words);
-
         // return Str::limit(strip_tags($this->body), 150);
     }
 }

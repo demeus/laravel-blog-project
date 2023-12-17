@@ -10,9 +10,11 @@ use Livewire\Attributes\Url;
 use Livewire\WithPagination;
 use Livewire\Attributes\Computed;
 
-class PostList extends Component
+class PostCategoryList extends Component
 {
     use WithPagination;
+
+    public Category $category;
 
     #[Url()]
     public string $sort = 'desc';
@@ -21,10 +23,8 @@ class PostList extends Component
     public string $search = '';
 
     #[Url()]
-    public string $category = '';
-
-    #[Url()]
     public bool $popular = false;
+
 
     public function setSort($sort) : void
     {
@@ -40,8 +40,7 @@ class PostList extends Component
 
     public function clearFilters() : void
     {
-        $this->search   = '';
-        $this->category = '';
+        $this->search = '';
         $this->resetPage();
     }
 
@@ -51,9 +50,7 @@ class PostList extends Component
         return Post::query()
             ->published()
             ->with('author', 'category')
-            ->when($this->activeCategory, function ($query) {
-                $query->withCategory($this->category);
-            })
+            ->withCategory($this->category->slug)
             ->when($this->popular, function ($query) {
                 $query->popular();
             })
@@ -62,18 +59,9 @@ class PostList extends Component
             ->paginate(3);
     }
 
-    #[Computed()]
-    public function activeCategory()
-    {
-        if (null === $this->category || '' === $this->category) {
-            return null;
-        }
-
-        return Category::where('slug', $this->category)->first();
-    }
 
     public function render()
     {
-        return view('livewire.post-list');
+        return view('livewire.post-category-list');
     }
 }

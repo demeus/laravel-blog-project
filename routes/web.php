@@ -4,10 +4,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ShowCategoryController;
 
 Route::get('/', HomeController::class)->name('home');
 
 Route::get('/blog', [PostController::class, 'index'])->name('posts.index');
+
+Route::get('/category/{category:slug}', ShowCategoryController::class)->name('categories.show');
 
 Route::get('/blog/{post:slug}', [PostController::class, 'show'])->name('posts.show');
 

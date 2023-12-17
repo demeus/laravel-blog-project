@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Enums\VisibilityStatusEnum;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -20,6 +22,7 @@ class Category extends Model
         'text_color',
         'icon',
         'status',
+        'show_in_navigation',
     ];
 
     public function sluggable() : array
@@ -31,8 +34,18 @@ class Category extends Model
         ];
     }
 
+    protected $casts = [
+        'show_in_navigation' => 'boolean',
+        'status'             => VisibilityStatusEnum::class,
+    ];
+
     public function posts() : HasMany
     {
         return $this->hasMany(Post::class);
+    }
+
+    public function scopeActive(Builder $query) : void
+    {
+        $query->where('status', VisibilityStatusEnum::ACTIVE);
     }
 }
