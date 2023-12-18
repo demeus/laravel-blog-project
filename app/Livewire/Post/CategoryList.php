@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Post;
 
 use App\Models\Category;
 use App\Models\Post;
@@ -10,9 +10,11 @@ use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class PostList extends Component
+class CategoryList extends Component
 {
     use WithPagination;
+
+    public Category $category;
 
     #[Url()]
     public string $sort = 'desc';
@@ -21,10 +23,8 @@ class PostList extends Component
     public string $search = '';
 
     #[Url()]
-    public string $category = '';
-
-    #[Url()]
     public bool $popular = false;
+
 
     public function setSort($sort): void
     {
@@ -40,8 +40,7 @@ class PostList extends Component
 
     public function clearFilters(): void
     {
-        $this->search   = '';
-        $this->category = '';
+        $this->search = '';
         $this->resetPage();
     }
 
@@ -50,30 +49,19 @@ class PostList extends Component
     {
         return Post::query()
             ->published()
-            ->with('author', 'category', 'tags')
-            ->when($this->activeCategory, function ($query) {
-                $query->withCategory($this->category);
-            })
+            ->with('author', 'category')
+            ->withCategory($this->category->slug)
             ->when($this->popular, function ($query) {
                 $query->popular();
             })
             ->search($this->search)
             ->orderBy('published_at', $this->sort)
-            ->paginate(3);
+            ->paginate(10);
     }
 
-    #[Computed()]
-    public function activeCategory()
-    {
-        if (null === $this->category || '' === $this->category) {
-            return null;
-        }
-
-        return Category::where('slug', $this->category)->first();
-    }
 
     public function render()
     {
-        return view('livewire.post-list');
+        return view('livewire.post.category-list');
     }
 }

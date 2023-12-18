@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Facades\Posts;
+use App\Models\Category;
 use App\Models\Post;
 use App\Service\PostViewService;
 use Illuminate\Contracts\Foundation\Application;
@@ -41,5 +42,15 @@ class PostController extends Controller
         $this->postViewService->handleView($request, $post);
         $recommendations = Posts::recommendations($post);
         return view('posts.show', compact('post', 'recommendations'));
+    }
+
+
+    /**
+     * @param  Category  $category
+     * @return View
+     */
+    public function category(Category $category): View
+    {
+        return view('categories.show', compact('category'));
     }
 }

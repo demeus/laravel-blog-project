@@ -1,18 +1,26 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\ShowCategoryController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
 
-Route::get('/blog', [PostController::class, 'index'])->name('posts.index');
 
-Route::get('/category/{category:slug}', ShowCategoryController::class)->name('categories.show');
+Route::controller(PostController::class)
+    ->prefix('blog')
+    ->as('posts.')
+    ->group(function () {
+        Route::get('/', 'index')->name("index");
+        Route::get('/{post:slug}', 'show')->name("show");
+        Route::get('/category/{category:slug}', 'category')->name("category");
+    });
 
-Route::get('/blog/{post:slug}', [PostController::class, 'show'])->name('posts.show');
+
+//Route::get('/category/{category:slug}', ShowCategoryController::class)->name('categories.show');
+//
+//Route::get('/blog/{post:slug}', [PostController::class, 'show'])->name('posts.show');
 
 Route::view('/about-us', 'about')->name('about');
 

@@ -22,11 +22,7 @@
 
 <body class="font-sans antialiased">
 <x-banner/>
-
-
-<header class="">
-    <livewire:navigation-top-menu/>
-</header>
+<x-site.navigation-top-bar/>
 
 
 @yield('hero')

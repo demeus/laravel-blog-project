@@ -2,30 +2,31 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Tables;
-use App\Models\Media;
-use Filament\Tables\Table;
-use Filament\Resources\Resource;
 use App\Filament\Resources\MediaResource\Pages;
+use App\Models\Media;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Table;
 
 class MediaResource extends Resource
 {
-    protected static ?string $model = Media::class;
+    protected static string|null $model = Media::class;
 
-    protected static ?string $navigationIcon = 'images';
+    protected static string|null $navigationIcon = 'images';
 
-    protected static ?string $navigationGroup = 'Web site';
+    protected static string|null $navigationGroup = 'Web site';
 
-    public static function table(Table $table) : Table
+    protected static int|null $navigationSort = 2;
+
+
+    public static function table(Table $table): Table
     {
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('file_name')
-
-                    ->state(fn (Media $record) : string => $record->getUrl('small'))
+                    ->state(fn(Media $record): string => $record->getUrl('small'))
                     ->label('Image')
-
-                    ->extraImgAttributes(fn (Media $record) : array => [
+                    ->extraImgAttributes(fn(Media $record): array => [
                         'loading' => 'lazy',
                     ]),
 
@@ -59,7 +60,6 @@ class MediaResource extends Resource
             ->filters([
                 //
             ])
-
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
@@ -67,7 +67,7 @@ class MediaResource extends Resource
             ]);
     }
 
-    public static function getPages() : array
+    public static function getPages(): array
     {
         return [
             'index' => Pages\ListMedia::route('/'),

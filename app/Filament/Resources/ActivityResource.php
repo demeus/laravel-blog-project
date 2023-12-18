@@ -2,29 +2,33 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Tables;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
-use Filament\Resources\Resource;
-use Filament\Forms\Components\Textarea;
-use Filament\Tables\Columns\TextColumn;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Models\Activity;
-use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\ActivityResource\Pages;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
+use Override;
+use Spatie\Activitylog\Models\Activity;
 
 class ActivityResource extends Resource
 {
-    protected static ?string $model = Activity::class;
+    protected static string|null $model = Activity::class;
 
-    protected static ?string $navigationGroup = 'Web site';
+    protected static string|null $navigationGroup = 'Web site';
 
-    protected static ?string $navigationIcon = 'activity';
+    protected static string|null $navigationIcon = 'activity';
 
-    protected static ?string $recordTitleAttribute = 'id';
+    protected static string|null $recordTitleAttribute = 'id';
 
-    #[\Override]
-    public static function form(Form $form) : Form
+    protected static int|null $navigationSort = 3;
+
+
+    #[Override]
+    public static function form(Form $form): Form
     {
         return $form
             ->schema([
@@ -45,13 +49,13 @@ class ActivityResource extends Resource
                 TextInput::make('causer_id'),
 
                 Textarea::make('properties')
-                    ->formatStateUsing(fn (Model $record) => $record->getRawOriginal('properties'))
+                    ->formatStateUsing(fn(Model $record) => $record->getRawOriginal('properties'))
                     ->json()
                     ->columnSpanFull(),
             ]);
     }
 
-    public static function table(Table $table) : Table
+    public static function table(Table $table): Table
     {
         return $table
             ->columns([
@@ -94,18 +98,18 @@ class ActivityResource extends Resource
             ->defaultSort('id', 'desc');
     }
 
-    public static function getRelations() : array
+    public static function getRelations(): array
     {
         return [
             //
         ];
     }
 
-    public static function getPages() : array
+    public static function getPages(): array
     {
         return [
             'index' => Pages\ListActivities::route('/'),
-            'view' => Pages\ViewActivity::route('/{record}'),
+            'view'  => Pages\ViewActivity::route('/{record}'),
         ];
     }
 }

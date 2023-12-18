@@ -2,36 +2,36 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\PageResource\Pages;
 use App\Models\Page;
-use Filament\Tables;
-use Filament\Forms\Set;
+use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Set;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
-use Filament\Resources\Resource;
-use Filament\Forms\Components\Group;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Textarea;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TagsInput;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Placeholder;
-use App\Filament\Resources\PageResource\Pages;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 
 class PageResource extends Resource
 {
-    protected static ?string $model = Page::class;
+    protected static string|null $model = Page::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?int $navigationSort = 2;
+    protected static int|null $navigationSort = 1;
 
-    protected static ?string $navigationGroup = 'Web site';
+    protected static string|null $navigationGroup = 'Web site';
 
-    public static function form(Form $form) : Form
+    public static function form(Form $form): Form
     {
         return $form
             ->schema(static::getFormComponents())
@@ -41,7 +41,7 @@ class PageResource extends Resource
             ]);
     }
 
-    public static function getFormComponents() : array
+    public static function getFormComponents(): array
     {
         return [
             Section::make('Content')
@@ -111,13 +111,13 @@ class PageResource extends Resource
                         ->schema([
                             Placeholder::make('created_at')
                                 ->label('Created at')
-                                ->content(fn (Page $page) : ?string => $page->created_at?->isoFormat('LLL')),
+                                ->content(fn(Page $page): ?string => $page->created_at?->isoFormat('LLL')),
 
                             Placeholder::make('updated_at')
                                 ->label('Last modified at')
-                                ->content(fn (Page $page) : ?string => $page->updated_at?->isoFormat('LLL')),
+                                ->content(fn(Page $page): ?string => $page->updated_at?->isoFormat('LLL')),
                         ])
-                        ->hidden(fn (Page $page) => !$page->exists),
+                        ->hidden(fn(Page $page) => !$page->exists),
 
                 ])
                 ->collapsible()
@@ -125,10 +125,9 @@ class PageResource extends Resource
                     'lg' => 1,
                 ]),
         ];
-
     }
 
-    public static function table(Table $table) : Table
+    public static function table(Table $table): Table
     {
         return $table
             ->columns(static::getTableColumns())
@@ -146,7 +145,7 @@ class PageResource extends Resource
             ]);
     }
 
-    public static function getTableColumns() : array
+    public static function getTableColumns(): array
     {
         return [
             TextColumn::make('id')
@@ -159,14 +158,16 @@ class PageResource extends Resource
                 ->collection('image')
                 ->conversion('medium')
                 ->disk('public')
-                ->defaultImageUrl('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjMgMTIzIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9IiM1MDQ2RTYiIGQ9Ik0wIDBoMTIzdjEyM0gweiIvPjxwYXRoIGZpbGw9IiNGRkYiIGZpbGwtcnVsZT0ibm9uemVybyIgZD0iTTUyLjkwOTA5MDkgMzBjNi4yNzU5NjMxIDAgMTEuMzYzNjM2NCA1LjAzNjc5NjYgMTEuMzYzNjM2NCAxMS4yNXY1LjYyNWMwIDMuMTA2NjAxNyAyLjU0MzgzNjYgNS42MjUgNS42ODE4MTgyIDUuNjI1aDUuNjgxODE4MUM4MS45MTIzMjY3IDUyLjUgODcgNTcuNTM2Nzk2NiA4NyA2My43NXYyMy42MjVDODcgOTAuNDggODQuNDU0NTQ1NSA5MyA4MS4zMTgxODE4IDkzSDQyLjY4MTgxODJDMzkuNTQ1NDU0NSA5MyAzNyA5MC40OCAzNyA4Ny4zNzV2LTUxLjc1QzM3IDMyLjUyIDM5LjU0MjQyNDIgMzAgNDIuNjgxODE4MiAzMFpNNjIgNzcuMjVINTAuNjM2MzYzNmMtMS4yNTUxOTI2IDAtMi4yNzI3MjcyIDEuMDA3MzU5My0yLjI3MjcyNzIgMi4yNXMxLjAxNzUzNDYgMi4yNSAyLjI3MjcyNzIgMi4yNUg2MmMxLjI1NTE5MjYgMCAyLjI3MjcyNzMtMS4wMDczNTkzIDIuMjcyNzI3My0yLjI1UzYzLjI1NTE5MjYgNzcuMjUgNjIgNzcuMjVabTExLjM2MzYzNjQtOUg1MC42MzYzNjM2Yy0xLjI1NTE5MjYgMC0yLjI3MjcyNzIgMS4wMDczNTkzLTIuMjcyNzI3MiAyLjI1czEuMDE3NTM0NiAyLjI1IDIuMjcyNzI3MiAyLjI1aDIyLjcyNzI3MjhjMS4yNTUxOTI2IDAgMi4yNzI3MjcyLTEuMDA3MzU5MyAyLjI3MjcyNzItMi4yNXMtMS4wMTc1MzQ2LTIuMjUtMi4yNzI3MjcyLTIuMjVaIi8+PHBhdGggZmlsbD0iI0ZGRiIgZmlsbC1ydWxlPSJub256ZXJvIiBkPSJNNjUgMzFjMi40OTI3MjI3IDIuODc0MDgzOSAzLjg2MjY3MTEgNi41NTIyNzIyIDMuODU3Mzg5MSAxMC4zNTY3NDI4djUuNjU0ODkwMWMwIC42MjQyOTk5LjUwNjY3ODEgMS4xMzA5NzggMS4xMzA5NzggMS4xMzA5NzhoNS42NTQ4OTAxQzc5LjQ0NzcyNzggNDguMTM3MzI4OSA4My4xMjU5MTYxIDQ5LjUwNzI3NzMgODYgNTJjLTIuNzAxNDg2Ny0xMC4yNzQ0MTg3LTEwLjcyNTU4MTMtMTguMjk4NTEzMy0yMS0yMVoiLz48L2c+PC9zdmc+')
+                ->defaultImageUrl(
+                    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjMgMTIzIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9IiM1MDQ2RTYiIGQ9Ik0wIDBoMTIzdjEyM0gweiIvPjxwYXRoIGZpbGw9IiNGRkYiIGZpbGwtcnVsZT0ibm9uemVybyIgZD0iTTUyLjkwOTA5MDkgMzBjNi4yNzU5NjMxIDAgMTEuMzYzNjM2NCA1LjAzNjc5NjYgMTEuMzYzNjM2NCAxMS4yNXY1LjYyNWMwIDMuMTA2NjAxNyAyLjU0MzgzNjYgNS42MjUgNS42ODE4MTgyIDUuNjI1aDUuNjgxODE4MUM4MS45MTIzMjY3IDUyLjUgODcgNTcuNTM2Nzk2NiA4NyA2My43NXYyMy42MjVDODcgOTAuNDggODQuNDU0NTQ1NSA5MyA4MS4zMTgxODE4IDkzSDQyLjY4MTgxODJDMzkuNTQ1NDU0NSA5MyAzNyA5MC40OCAzNyA4Ny4zNzV2LTUxLjc1QzM3IDMyLjUyIDM5LjU0MjQyNDIgMzAgNDIuNjgxODE4MiAzMFpNNjIgNzcuMjVINTAuNjM2MzYzNmMtMS4yNTUxOTI2IDAtMi4yNzI3MjcyIDEuMDA3MzU5My0yLjI3MjcyNzIgMi4yNXMxLjAxNzUzNDYgMi4yNSAyLjI3MjcyNzIgMi4yNUg2MmMxLjI1NTE5MjYgMCAyLjI3MjcyNzMtMS4wMDczNTkzIDIuMjcyNzI3My0yLjI1UzYzLjI1NTE5MjYgNzcuMjUgNjIgNzcuMjVabTExLjM2MzYzNjQtOUg1MC42MzYzNjM2Yy0xLjI1NTE5MjYgMC0yLjI3MjcyNzIgMS4wMDczNTkzLTIuMjcyNzI3MiAyLjI1czEuMDE3NTM0NiAyLjI1IDIuMjcyNzI3MiAyLjI1aDIyLjcyNzI3MjhjMS4yNTUxOTI2IDAgMi4yNzI3MjcyLTEuMDA3MzU5MyAyLjI3MjcyNzItMi4yNXMtMS4wMTc1MzQ2LTIuMjUtMi4yNzI3MjcyLTIuMjVaIi8+PHBhdGggZmlsbD0iI0ZGRiIgZmlsbC1ydWxlPSJub256ZXJvIiBkPSJNNjUgMzFjMi40OTI3MjI3IDIuODc0MDgzOSAzLjg2MjY3MTEgNi41NTIyNzIyIDMuODU3Mzg5MSAxMC4zNTY3NDI4djUuNjU0ODkwMWMwIC42MjQyOTk5LjUwNjY3ODEgMS4xMzA5NzggMS4xMzA5NzggMS4xMzA5NzhoNS42NTQ4OTAxQzc5LjQ0NzcyNzggNDguMTM3MzI4OSA4My4xMjU5MTYxIDQ5LjUwNzI3NzMgODYgNTJjLTIuNzAxNDg2Ny0xMC4yNzQ0MTg3LTEwLjcyNTU4MTMtMTguMjk4NTEzMy0yMS0yMVoiLz48L2c+PC9zdmc+'
+                )
                 ->square()
                 ->label(''),
 
             TextColumn::make('title')
                 ->sortable()
                 ->searchable()
-                ->description(fn (Page $page) => $page->slug),
+                ->description(fn(Page $page) => $page->slug),
 
             TextColumn::make('author.name')
                 ->sortable()
@@ -184,19 +185,19 @@ class PageResource extends Resource
         ];
     }
 
-    public static function getRelations() : array
+    public static function getRelations(): array
     {
         return [
             //
         ];
     }
 
-    public static function getPages() : array
+    public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPages::route('/'),
+            'index'  => Pages\ListPages::route('/'),
             'create' => Pages\CreatePage::route('/create'),
-            'edit' => Pages\EditPage::route('/{record}/edit'),
+            'edit'   => Pages\EditPage::route('/{record}/edit'),
         ];
     }
 }

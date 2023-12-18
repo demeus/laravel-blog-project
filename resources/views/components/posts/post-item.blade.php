@@ -41,7 +41,7 @@
                     </div>
                 @endif
                 <div>
-                    <livewire:like-button :key="'like-' . $post->id" :$post/>
+                    <livewire:post.like-button :key="'like-' . $post->id" :$post/>
                 </div>
             </div>
         </div>
