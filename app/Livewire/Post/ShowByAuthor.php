@@ -42,6 +42,11 @@ class ShowByAuthor extends Component
         return $this->user->posts()
             ->published()
             ->with('category', 'tags')
+            ->when($this->category, function ($query) {
+                $query->whereHas('category', function ($query) {
+                    $query->where('slug', $this->category);
+                });
+            })
             ->search($this->search)
             ->orderBy('published_at', $this->sort)
             ->paginate(10);
@@ -67,10 +72,6 @@ class ShowByAuthor extends Component
         $this->sort = ('desc' === $sort) ? 'desc' : 'asc';
     }
 
-    public function setCategory($category): void
-    {
-        dd($category);
-    }
 
     public function clearFilters(): void
     {
