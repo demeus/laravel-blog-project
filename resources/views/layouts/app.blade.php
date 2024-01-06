@@ -30,6 +30,7 @@
 <main class="container flex flex-grow px-5 mx-auto">
     {{ $slot }}
 </main>
+<livewire:cookie-banner/>
 
 <x-site.footer/>
 

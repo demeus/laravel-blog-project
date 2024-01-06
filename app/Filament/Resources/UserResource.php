@@ -12,12 +12,12 @@ use Filament\Tables\Table;
 
 class UserResource extends Resource
 {
-    protected static string|null $navigationGroup = 'Web site';
 
     protected static string|null $model = User::class;
 
     protected static string|null $navigationIcon = 'heroicon-o-users';
 
+    protected static string|null $navigationGroup = 'Web site';
     protected static int|null $navigationSort = 3;
 
 

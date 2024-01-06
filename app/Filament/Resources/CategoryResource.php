@@ -2,22 +2,22 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Forms;
-use Filament\Tables;
-use App\Models\Category;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
-use Illuminate\Support\Str;
-use Filament\Resources\Resource;
 use App\Enums\VisibilityStatusEnum;
-use Filament\Forms\Components\Toggle;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
-use Filament\Tables\Columns\ToggleColumn;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\ColorPicker;
 use App\Filament\Resources\CategoryResource\Pages;
+use App\Models\Category;
+use Filament\Forms;
+use Filament\Forms\Components\ColorPicker;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class CategoryResource extends Resource
 {
@@ -27,7 +27,7 @@ class CategoryResource extends Resource
 
     protected static string|null $navigationIcon = 'heroicon-o-tag';
 
-    public static function form(Form $form) : Form
+    public static function form(Form $form): Form
     {
         return $form
             ->schema([
@@ -59,9 +59,9 @@ class CategoryResource extends Resource
                                 $component->state($state == VisibilityStatusEnum::ACTIVE->value);
                             })
                             ->dehydrateStateUsing(
-                                fn (
+                                fn(
                                     string $state
-                                ) : string => $state ? VisibilityStatusEnum::ACTIVE->value : VisibilityStatusEnum::DISABLED->value
+                                ): string => $state ? VisibilityStatusEnum::ACTIVE->value : VisibilityStatusEnum::DISABLED->value
                             ),
 
                         Toggle::make('show_in_navigation')
@@ -70,10 +70,11 @@ class CategoryResource extends Resource
             ]);
     }
 
-    public static function table(Table $table) : Table
+    public static function table(Table $table): Table
     {
         return $table
             ->columns([
+                TextColumn::make('sort_order'),
                 TextColumn::make('title')
                     ->sortable()
                     ->searchable(),
@@ -96,10 +97,14 @@ class CategoryResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->slideOver(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ])
             ->striped()
@@ -108,17 +113,21 @@ class CategoryResource extends Resource
                     ->slideOver(),
             ])
             ->striped()
+            ->reorderable('sort_order')
+            ->defaultSort('sort_order')
+            ->recordClasses(fn(Category $record) => $record->deleted_at === 'draft' ? 'opacity-30' : null)
+            ->paginated(false)
             ->deferLoading();
     }
 
-    public static function getRelations() : array
+    public static function getRelations(): array
     {
         return [
             //
         ];
     }
 
-    public static function getPages() : array
+    public static function getPages(): array
     {
         return [
             'index' => Pages\ListCategories::route('/'),
@@ -127,7 +136,7 @@ class CategoryResource extends Resource
         ];
     }
 
-    public static function getEloquentQuery() : Builder
+    public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
             ->withoutGlobalScopes([

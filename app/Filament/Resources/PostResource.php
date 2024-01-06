@@ -189,7 +189,8 @@ class PostResource extends Resource
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('id', 'desc');
+            ->defaultSort('id', 'desc')
+            ->striped();
     }
 
     public static function getTableColumns(): array

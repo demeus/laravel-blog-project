@@ -19,6 +19,7 @@ return new class extends Migration {
             $table->string('text_color')->nullable();
             $table->string('status')->default(VisibilityStatusEnum::ACTIVE->value);
             $table->boolean('show_in_navigation')->default(1);
+            $table->integer('sort_order')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

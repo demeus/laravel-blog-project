@@ -9,19 +9,19 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
-        "blade-ui-kit/blade-heroicons": "^2.1",
+        "blade-ui-kit/blade-heroicons": "^2.2.1",
         "cviebrock/eloquent-sluggable": "^10.0",
-        "filament/filament": "^3.0-stable",
+        "filament/filament": "^3.1.24",
         "filament/spatie-laravel-media-library-plugin": "^3.0-stable",
         "filament/spatie-laravel-settings-plugin": "^3.0-stable",
-        "filament/spatie-laravel-tags-plugin": "^3.1",
+        "filament/spatie-laravel-tags-plugin": "^3.1.24",
         "flowframe/laravel-trend": "^0.1.5",
         "guzzlehttp/guzzle": "^7.8.1",
-        "laravel/framework": "^10.35",
-        "laravel/jetstream": "^4.1.2",
+        "laravel/framework": "^10.38.0",
+        "laravel/jetstream": "^4.2.0",
         "laravel/sanctum": "^3.3.2",
         "laravel/tinker": "^2.8.2",
-        "livewire/livewire": "^3.3",
+        "livewire/livewire": "^3.3.3",
         "spatie/laravel-activitylog": "^4.7.3",
         "spatie/laravel-feed": "^4.3",
         "spatie/laravel-medialibrary": "^10.15.0"
@@ -33,8 +33,8 @@
         "laravel/sail": "^1.26.3",
         "mockery/mockery": "^1.6.7",
         "nunomaduro/collision": "^7.10",
-        "phpunit/phpunit": "^10.5.2",
-        "spatie/laravel-ignition": "^2.3.1"
+        "phpunit/phpunit": "^10.5.3",
+        "spatie/laravel-ignition": "^2.3.2"
     },
     "autoload": {
         "psr-4": {

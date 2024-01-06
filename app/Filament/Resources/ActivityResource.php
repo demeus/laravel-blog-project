@@ -10,8 +10,9 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Override;
 use Spatie\Activitylog\Models\Activity;
 
 class ActivityResource extends Resource
@@ -27,7 +28,6 @@ class ActivityResource extends Resource
     protected static int|null $navigationSort = 3;
 
 
-    #[Override]
     public static function form(Form $form): Form
     {
         return $form
@@ -95,15 +95,10 @@ class ActivityResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
+            ->deferLoading()
             ->defaultSort('id', 'desc');
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
 
     public static function getPages(): array
     {
@@ -111,5 +106,10 @@ class ActivityResource extends Resource
             'index' => Pages\ListActivities::route('/'),
             'view'  => Pages\ViewActivity::route('/{record}'),
         ];
+    }
+
+    protected function paginateTableQuery(Builder $query): Paginator
+    {
+        return $query->simplePaginate($this->getTableRecordsPerPage());
     }
 }
