@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Facades\Posts;
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\User;
 use App\Service\PostViewService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -51,6 +52,19 @@ class PostController extends Controller
      */
     public function category(Category $category): View
     {
-        return view('categories.show', compact('category'));
+        return view('posts.byCategory', compact('category'));
+    }
+
+
+    public function showByAuthor(User $user): View|\Illuminate\Foundation\Application|Factory|Application
+    {
+        $categories = Category::query()
+            ->active()
+            ->where('show_in_navigation', true)
+            ->whereHas('posts', function ($query) {
+                $query->published();
+            })->take(10)->get();
+
+        return view('posts.byAuthor', compact('user', 'categories'));
     }
 }

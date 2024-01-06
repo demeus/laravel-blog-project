@@ -15,6 +15,7 @@ Route::controller(PostController::class)
         Route::get('/', 'index')->name("index");
         Route::get('/{post:slug}', 'show')->name("show");
         Route::get('/category/{category:slug}', 'category')->name("category");
+        Route::get('/author/{user}', 'showByAuthor')->name('author');
     });
 
 
